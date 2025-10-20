@@ -22,6 +22,9 @@ class BaseCommand(ABC):
     def _abs_path(self, path: str) -> str:
         if path == "~":
             return os.path.expanduser("~")
+        elif path == "..":
+            return os.path.dirname(os.getcwd())
+
         if not os.path.isabs(path):
             return os.path.abspath(os.path.join(os.getcwd(), path))
 
@@ -38,7 +41,7 @@ class BaseCommand(ABC):
             raise PathNotFoundError(log)
 
     def _is_file(self, path: str):
-        if os.path.isdir(path):
+        if not os.path.isfile(path):
             log = f"""
 [Команда] {self.command}
 [Статус] ОШИБКА
@@ -57,21 +60,21 @@ class BaseCommand(ABC):
             logging.error(log)
             return NotADirectoryError
 
-    def _is_working(self, path: str) -> None:
+    def _start_execution(self, path: str) -> None:
         log = f"""
 Выполнение команды {self.command}
 [Путь] {path}
 """
         logging.info(log)
 
-    def _success_working(self, path: str) -> None:
+    def _success_execution(self, path: str) -> None:
         log = f"""
 Команда {self.command} успешно выполнилась
 [Путь] {path}
 """
         logging.info(log)
 
-    def _is_failure_working(self, path: str, message: str) -> None:
+    def _failure_execution(self, path: str, message: str) -> None:
         log = f"""
 Команда {self.command} не была выполнена
 [Путь] {path}

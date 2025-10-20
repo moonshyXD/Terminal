@@ -11,12 +11,16 @@ class PathNotFoundError(ShellError):
 
 
 class NotAFileError(ShellError):
-    """Объект не является файлом"""
+    """Объект по пути не файл"""
 
     pass
 
 
 class NotADirectoryError(ShellError):
-    """Объект не является директорией"""
+    """Объект по пути не папка"""
 
     pass
+
+
+class NotTextFile(ShellError):
+    """Объект по пути не текстовый"""

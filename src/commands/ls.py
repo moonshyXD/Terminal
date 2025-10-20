@@ -7,13 +7,13 @@ from errors import ShellError
 
 
 class Ls(BaseClass):
-    def execute(self, path: str, detailed: bool):
+    def execute(self, path: str, detailed: bool) -> None:
         try:
             abs_path = self._abs_path(path)
 
             self._path_exists(abs_path)
             self._is_directory(abs_path)
-            self._is_working(abs_path)
+            self._is_execution(abs_path)
 
             items = os.listdir(abs_path)
 
@@ -22,12 +22,12 @@ class Ls(BaseClass):
             else:
                 self._print_not_detailed(items)
 
-            self._success_working(abs_path)
+            self._success_execution(abs_path)
         except Exception as message:
-            self._failure_working(path, str(message))
+            self._failure_execution(path, str(message))
             raise ShellError(str(message)) from None
 
-    def _print_detalied(self, items: list, abs_path: str):
+    def _print_detalied(self, items: list, abs_path: str) -> None:
         for item in sorted(items):
             item_path = os.path.join(abs_path, item)
 
@@ -41,6 +41,6 @@ class Ls(BaseClass):
             log = f"{mode} {item_size:>10} {mtime_str} {item}"
             print(log)
 
-    def _print_not_detailed(self, items: list):
+    def _print_not_detailed(self, items: list) -> None:
         sorted_items = sorted(items)
         print(" ".join(sorted_items))
