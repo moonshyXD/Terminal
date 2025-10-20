@@ -1,0 +1,8 @@
+PYTHON = python3
+
+.PHONY: lint
+lint:
+	@echo "Запуск ruff check --fix..."
+	ruff check --fix
+	@echo "Запуск ruff format..."
+	ruff format .

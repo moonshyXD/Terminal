@@ -3,6 +3,12 @@ name = "labs"
 version = "0.1.0"
 description = "Mini File Manager"
 requires-python = ">=3.12"
+dependencies = [
+    "logging>=0.4.9.6",
+    "mypy>=1.18.2",
+    "pre-commit>=4.3.0",
+    "ruff>=0.14.1",
+]
 
 [dependency-groups]
 dev = [

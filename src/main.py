@@ -1,10 +1,11 @@
-from src.power import power_function
 from src.constants import SAMPLE_CONSTANT
+from src.power import power_function
 
 
 def main() -> None:
     """
-    Обязательнная составляющая программ, которые сдаются. Является точкой входа в приложение
+    Обязательнная составляющая программ, которые сдаются.
+    Является точкой входа в приложение
     :return: Данная функция ничего не возвращает
     """
 
