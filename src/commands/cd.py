@@ -1,4 +1,4 @@
-from src.baseclass import BaseClass
+from commands.base_command import BaseClass
 
 
 class Cd(BaseClass):
