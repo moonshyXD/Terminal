@@ -2,10 +2,10 @@ import logging
 import os
 from abc import ABC, abstractmethod
 
-from errors import NotADirectoryError, NotAFileError, PathNotFoundError
+from src.errors import NotADirectoryError, NotAFileError, PathNotFoundError
 
 
-class BaseCommand(ABC):
+class BaseClass(ABC):
     _command: str = ""
 
     def __init__(self):
@@ -26,7 +26,7 @@ class BaseCommand(ABC):
             return os.path.dirname(os.getcwd())
 
         if not os.path.isabs(path):
-            return os.path.abspath(os.path.join(os.getcwd(), path))
+            return os.path.join(os.getcwd(), path)
 
         return path
 

@@ -1,23 +1,23 @@
-from src.constants import SAMPLE_CONSTANT
-from src.power import power_function
+import os
+import shutil
+
+from logger import setup
+from src.errors import ShellError
 
 
-def main() -> None:
-    """
-    Обязательнная составляющая программ, которые сдаются.
-    Является точкой входа в приложение
-    :return: Данная функция ничего не возвращает
-    """
+def main():
+    setup.setup_logging()
+    initial_dir = os.getcwd()
+    print(f"Начальная директория: {initial_dir}")
 
-    target, degree = map(
-        int, input("Введите два числа разделенные пробелом: ").split(" ")
-    )
+    try:
+        shutil.copy("README.txt", "pizda")
 
-    result = power_function(target=target, power=degree)
+    except ShellError as e:
+        print(f"Ошибка: {e}")
 
-    print(result)
-
-    print(SAMPLE_CONSTANT)
+    os.chdir(initial_dir)
+    print(f"\nВернулись в: {os.getcwd()}")
 
 
 if __name__ == "__main__":

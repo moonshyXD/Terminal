@@ -1,8 +1,8 @@
 import logging
 from pathlib import Path
 
-from commands.base_command import BaseClass
-from errors import NotTextFile, ShellError
+from src.commands.base_command import BaseClass
+from src.errors import NotTextFile, ShellError
 
 
 class Cat(BaseClass):
@@ -15,8 +15,8 @@ class Cat(BaseClass):
             self._start_execution(abs_path)
             self._is_text_file(abs_path)
 
-            abs_path = Path(abs_path)
-            content = abs_path.read_text(encoding="utf-8")
+            path_to_read = Path(abs_path)
+            content = path_to_read.read_text(encoding="utf-8")
             print(content)
 
             self._success_execution(abs_path)

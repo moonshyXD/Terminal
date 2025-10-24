@@ -1,7 +1,7 @@
 import os
 
-from commands.base_command import BaseClass
-from errors import ShellError
+from src.commands.base_command import BaseClass
+from src.errors import ShellError
 
 
 class Cd(BaseClass):
