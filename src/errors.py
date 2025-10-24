@@ -24,3 +24,9 @@ class NotADirectoryError(ShellError):
 
 class NotTextFile(ShellError):
     """Объект по пути не текстовый"""
+
+    pass
+
+
+class ParserError(Exception):
+    pass

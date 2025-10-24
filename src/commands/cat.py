@@ -6,22 +6,22 @@ from src.errors import NotTextFile, ShellError
 
 
 class Cat(BaseClass):
-    def execute(self, path: str) -> None:
+    def execute(self, path: list) -> None:
         try:
-            abs_path = self._abs_path(path)
+            abs_path = self._abs_path(path[0])
 
             self._path_exists(abs_path)
             self._is_file(abs_path)
-            self._start_execution(abs_path)
+            self._start_execution(path[0])
             self._is_text_file(abs_path)
 
             path_to_read = Path(abs_path)
             content = path_to_read.read_text(encoding="utf-8")
             print(content)
 
-            self._success_execution(abs_path)
+            self._success_execution(path[0])
         except Exception as message:
-            self._failure_execution(path, str(message))
+            self._failure_execution(path[0], str(message))
             raise ShellError(str(message)) from None
 
     def _is_text_file(self, path: str) -> None:

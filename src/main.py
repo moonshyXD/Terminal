@@ -1,24 +1,33 @@
 import os
-import shutil
+import sys
 
 from logger import setup
-from src.errors import ShellError
+from parser.setup import Parser
+from src.commands import cat, cd, cp, ls
 
 
-def main():
-    setup.setup_logging()
-    initial_dir = os.getcwd()
-    print(f"Начальная директория: {initial_dir}")
+class Terminal:
+    def __init__(self):
+        self.cat = cat.Cat()
+        self.cd = cd.Cd()
+        self.cp = cp.Cp()
+        self.ls = ls.Ls()
+        self.parser = Parser()
 
-    try:
-        shutil.copy("README.txt", "pizda")
+    def run(self):
+        setup.setup_logging()
+        initial_dir = os.getcwd()
+        print(f"Начальная директория: {initial_dir}")
 
-    except ShellError as e:
-        print(f"Ошибка: {e}")
+        for line in sys.stdin:
+            tokens = self.parser.parse(line.strip().split())
+            if tokens:
+                print(tokens)
 
-    os.chdir(initial_dir)
-    print(f"\nВернулись в: {os.getcwd()}")
+        os.chdir(initial_dir)
+        print(f"\nВернулись в: {os.getcwd()}")
 
 
 if __name__ == "__main__":
-    main()
+    terminal = Terminal()
+    terminal.run()

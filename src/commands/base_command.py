@@ -1,6 +1,7 @@
 import logging
 import os
 from abc import ABC, abstractmethod
+from typing import Any
 
 from src.errors import NotADirectoryError, NotAFileError, PathNotFoundError
 
@@ -16,7 +17,7 @@ class BaseClass(ABC):
         return self._command
 
     @abstractmethod
-    def execute(self, path: str) -> None:
+    def execute(self, *args: Any, **kwargs: Any) -> None:
         pass
 
     def _abs_path(self, path: str) -> str:
@@ -60,24 +61,24 @@ class BaseClass(ABC):
             logging.error(log)
             return NotADirectoryError
 
-    def _start_execution(self, path: str) -> None:
+    def _start_execution(self, path: list) -> None:
         log = f"""
 Выполнение команды {self.command}
-[Путь] {path}
+[Путь] {path[0]}
 """
         logging.info(log)
 
-    def _success_execution(self, path: str) -> None:
+    def _success_execution(self, path: list) -> None:
         log = f"""
 Команда {self.command} успешно выполнилась
-[Путь] {path}
+[Путь] {path[0]}
 """
         logging.info(log)
 
-    def _failure_execution(self, path: str, message: str) -> None:
+    def _failure_execution(self, path: list, message: str) -> None:
         log = f"""
 Команда {self.command} не была выполнена
-[Путь] {path}
+[Путь] {path[0]}
 [Сообщение] {message}
 """
         logging.info(log)
