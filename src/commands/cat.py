@@ -11,7 +11,7 @@ class Cat(BaseClass):
         if not tokens.paths:
             message = "No such file or directory"
             logging.error(message)
-            raise PathNotFoundError(message)
+            raise PathNotFoundError(message) from None
 
         paths = tokens.paths
 
@@ -36,4 +36,4 @@ class Cat(BaseClass):
         if file_extension not in text_extensions:
             message = f"Not a text file: {file_extension}"
             logging.error(message)
-            raise NotTextFile(message)
+            raise NotTextFile(message) from None

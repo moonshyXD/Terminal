@@ -3,8 +3,8 @@ import sys
 
 from logger import setup
 from parser.setup import Parser
-from src.commands import cat, cd, cp, ls
-from src.errors import ShellError  # Импортируйте ваш базовый класс ошибок
+from src.commands import cat, cd, cp, ls, rm
+from src.errors import ShellError
 
 
 class Terminal:
@@ -13,6 +13,7 @@ class Terminal:
         self.cd = cd.Cd()
         self.cp = cp.Cp()
         self.ls = ls.Ls()
+        self.rm = rm.Rm()
         self.parser = Parser()
 
         self.COMMANDS = {
@@ -20,6 +21,7 @@ class Terminal:
             "cd": self.cd.execute,
             "cp": self.cp.execute,
             "ls": self.ls.execute,
+            "rm": self.rm.execute
         }
 
     def run(self):

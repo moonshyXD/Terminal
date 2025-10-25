@@ -13,7 +13,7 @@ class Cp(BaseClass):
         if not tokens.paths or len(tokens.paths) < 2:
             message = "Missing file operand"
             logging.error(message)
-            raise ShellError(message)
+            raise ShellError(message) from None
 
         paths = tokens.paths
         directory = tokens.r
@@ -26,13 +26,17 @@ class Cp(BaseClass):
             self._path_exists(abs_from_path)
 
             if directory:
-                copied_directory = re.search(r"([^/]+)/?$", abs_from_path)
+                self._is_directory(abs_from_path)
+                self._path_exists(abs_to_path)
 
-                if copied_directory is None:
+                match = re.search(r"([^/]+)/?$", abs_from_path)
+                if match is not None:
+                    copied_directory = match.group(1)
+                    print(copied_directory)
+                else:
                     raise ShellError(f"Invalid path: {abs_from_path}")
 
-                dir_name = copied_directory.group(1)
-                target_path = os.path.join(abs_to_path, dir_name)
+                target_path = os.path.join(abs_to_path, copied_directory)
 
                 shutil.copytree(
                     abs_from_path,
@@ -40,10 +44,10 @@ class Cp(BaseClass):
                     dirs_exist_ok=True,
                 )
             else:
-                if os.path.isdir(abs_to_path):
-                    shutil.copy(abs_from_path, abs_to_path)
-                else:
-                    shutil.copy(abs_from_path, abs_to_path)
+                directory_path = os.path.dirname(abs_to_path)
+                self._path_exists(directory_path)
+                self._is_file(abs_from_path)
+                shutil.copy(abs_from_path, abs_to_path)
 
         except Exception as message:
             self._failure_execution(paths, str(message))

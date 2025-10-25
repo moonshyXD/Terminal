@@ -1,19 +1,26 @@
+import argparse
+import os
+
 from commands.base_command import BaseClass
 from errors import ShellError
 
 
 class Mv(BaseClass):
-    def execute(self, path: str):
+    def execute(self, tokens: argparse.Namespace):
+        if not tokens.paths:
+            paths = [os.path.expanduser("~")]
+        else:
+            paths = tokens.paths
+
         try:
-            abs_path = self._abs_path(path)
+            abs_path = self._abs_path(paths[0])
 
+            self._start_execution(paths)
             self._path_exists(abs_path)
-            self._is_file(abs_path)
-            self._start_execution(abs_path)
+            self._is_directory(abs_path)
 
-            # выполнение
-
-            self._success_execution(abs_path)
+            os.chdir(abs_path)
+            print(f"Текущая директория: {os.getcwd()}")
         except Exception as message:
-            self._failure_execution(path, str(message))
+            self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None

@@ -33,18 +33,20 @@ class BaseClass(ABC):
 
     def _path_exists(self, path: str) -> None:
         if not os.path.exists(path):
-            logging.error("No such file or directory")
-            raise PathNotFoundError("No such file or directory")
+            logging.error(f"No such file or directory {path}")
+            raise PathNotFoundError(
+                f"No such file or directory {path}"
+            ) from None
 
     def _is_file(self, path: str):
         if not os.path.isfile(path):
             logging.error(f"Not a file: {path}")
-            raise NotAFileError(f"Not a file: {path}")
+            raise NotAFileError(f"Not a file: {path}") from None
 
     def _is_directory(self, path: str):
         if not os.path.isdir(path):
             logging.error(f"Not a directory: {path}")
-            raise NotADirectoryError(f"Not a directory: {path}")
+            raise NotADirectoryError(f"Not a directory: {path}") from None
 
     def _start_execution(self, paths: list) -> None:
         command_str = f"{self.command} {' '.join(paths)}"

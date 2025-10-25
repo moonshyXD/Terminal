@@ -30,3 +30,7 @@ class NotTextFile(ShellError):
 
 class ParserError(Exception):
     pass
+
+
+class DeletingError(ShellError):
+    pass
