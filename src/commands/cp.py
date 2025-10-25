@@ -1,4 +1,6 @@
+import argparse
 import logging
+import os
 import re
 import shutil
 
@@ -7,58 +9,46 @@ from src.errors import ShellError
 
 
 class Cp(BaseClass):
-    def execute(self, path: list, directory: bool):
+    def execute(self, tokens: argparse.Namespace):
+        if not tokens.paths or len(tokens.paths) < 2:
+            message = "Missing file operand"
+            logging.error(message)
+            raise ShellError(message)
+
+        paths = tokens.paths
+        directory = tokens.r
+
         try:
-            abs_from_path = self._abs_path(path[0])
-            abs_to_path = self._abs_path(path[1])
+            abs_from_path = self._abs_path(paths[0])
+            abs_to_path = self._abs_path(paths[1])
 
+            self._start_execution(paths)
             self._path_exists(abs_from_path)
-            self._path_exists(abs_to_path)
-
-            self._start_execution(path)
 
             if directory:
                 copied_directory = re.search(r"([^/]+)/?$", abs_from_path)
+
+                if copied_directory is None:
+                    raise ShellError(f"Invalid path: {abs_from_path}")
+
+                dir_name = copied_directory.group(1)
+                target_path = os.path.join(abs_to_path, dir_name)
+
                 shutil.copytree(
-                    f"{abs_from_path}",
-                    f"{abs_to_path}{copied_directory}",
+                    abs_from_path,
+                    target_path,
                     dirs_exist_ok=True,
                 )
             else:
-                shutil.copy(f"{abs_from_path}", f"{abs_to_path}")
+                if os.path.isdir(abs_to_path):
+                    shutil.copy(abs_from_path, abs_to_path)
+                else:
+                    shutil.copy(abs_from_path, abs_to_path)
 
-            self._success_execution(path)
         except Exception as message:
-            self._failure_execution(path, str(message))
+            self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
 
-    def _start_execution(
-        self,
-        path: list,
-    ) -> None:
-        log = f"""
-Выполнение команды {self.command}
-[Путь откуда] {path[0]}
-[Путь куда] {path[1]}
-"""
-        logging.info(log)
-
-    def _success_execution(
-        self,
-        path: list,
-    ) -> None:
-        log = f"""
-Команда {self.command} успешно выполнилась
-[Путь откуда] {path[0]}
-[Путь куда] {path[1]}
-"""
-        logging.info(log)
-
-    def _failure_execution(self, path: list, message: str) -> None:
-        log = f"""
-Команда {self.command} не была выполнена
-[Путь откуда] {path[0]}
-[Путь куда] {path[1]}
-[Сообщение] {message}
-"""
-        logging.info(log)
+    def _start_execution(self, path: list) -> None:
+        command_str = f"{self.command} {path[0]} {path[1]}"
+        logging.info(command_str)

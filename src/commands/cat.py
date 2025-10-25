@@ -1,37 +1,39 @@
+import argparse
 import logging
 from pathlib import Path
 
 from src.commands.base_command import BaseClass
-from src.errors import NotTextFile, ShellError
+from src.errors import NotTextFile, PathNotFoundError, ShellError
 
 
 class Cat(BaseClass):
-    def execute(self, path: list) -> None:
-        try:
-            abs_path = self._abs_path(path[0])
+    def execute(self, tokens: argparse.Namespace) -> None:
+        if not tokens.paths:
+            message = "No such file or directory"
+            logging.error(message)
+            raise PathNotFoundError(message)
 
+        paths = tokens.paths
+
+        try:
+            abs_path = self._abs_path(paths[0])
+
+            self._start_execution(paths)
             self._path_exists(abs_path)
             self._is_file(abs_path)
-            self._start_execution(path[0])
             self._is_text_file(abs_path)
 
             path_to_read = Path(abs_path)
             content = path_to_read.read_text(encoding="utf-8")
             print(content)
-
-            self._success_execution(path[0])
         except Exception as message:
-            self._failure_execution(path[0], str(message))
+            self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
 
     def _is_text_file(self, path: str) -> None:
-        text_extensions = {".txt", ".py", ".json", ".xml"}
+        text_extensions = {".txt", ".py", ".json", ".xml", ".md"}
         file_extension = Path(path).suffix.lower()
         if file_extension not in text_extensions:
-            log = f"""
-[Команда] {self.command}
-[Статус] ОШИБКА
-[Сообщение] файл {file_extension} не является текстовым
-"""
-            logging.error(log)
-            raise NotTextFile
+            message = f"Not a text file: {file_extension}"
+            logging.error(message)
+            raise NotTextFile(message)

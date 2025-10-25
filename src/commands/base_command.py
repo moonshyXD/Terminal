@@ -33,52 +33,22 @@ class BaseClass(ABC):
 
     def _path_exists(self, path: str) -> None:
         if not os.path.exists(path):
-            log = f"""
-[Команда] {self.command}
-[Статус] ОШИБКА
-[Сообщение] не найден файл по пути: {path}
-"""
-            logging.error(log)
-            raise PathNotFoundError(log)
+            logging.error("No such file or directory")
+            raise PathNotFoundError("No such file or directory")
 
     def _is_file(self, path: str):
         if not os.path.isfile(path):
-            log = f"""
-[Команда] {self.command}
-[Статус] ОШИБКА
-[Сообщение] файл {path} не является файлом
-"""
-            logging.error(log)
-            return NotAFileError
+            logging.error(f"Not a file: {path}")
+            raise NotAFileError(f"Not a file: {path}")
 
     def _is_directory(self, path: str):
         if not os.path.isdir(path):
-            log = f"""
-[Команда] {self.command}
-[Статус] ОШИБКА
-[Сообщение] файл {path} не является директорией
-"""
-            logging.error(log)
-            return NotADirectoryError
+            logging.error(f"Not a directory: {path}")
+            raise NotADirectoryError(f"Not a directory: {path}")
 
-    def _start_execution(self, path: list) -> None:
-        log = f"""
-Выполнение команды {self.command}
-[Путь] {path[0]}
-"""
-        logging.info(log)
+    def _start_execution(self, paths: list) -> None:
+        command_str = f"{self.command} {' '.join(paths)}"
+        logging.info(command_str)
 
-    def _success_execution(self, path: list) -> None:
-        log = f"""
-Команда {self.command} успешно выполнилась
-[Путь] {path[0]}
-"""
-        logging.info(log)
-
-    def _failure_execution(self, path: list, message: str) -> None:
-        log = f"""
-Команда {self.command} не была выполнена
-[Путь] {path[0]}
-[Сообщение] {message}
-"""
-        logging.info(log)
+    def _failure_execution(self, paths: list, message: str) -> None:
+        logging.error(f"{message}")
