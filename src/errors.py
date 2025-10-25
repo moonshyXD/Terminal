@@ -34,3 +34,7 @@ class ParserError(Exception):
 
 class DeletingError(ShellError):
     pass
+
+
+class MovingError(ShellError):
+    pass

@@ -2,8 +2,8 @@ import argparse
 import logging
 from pathlib import Path
 
-from src.commands.base_command import BaseClass
 from src.errors import NotTextFile, PathNotFoundError, ShellError
+from src.file_commands.base_command import BaseClass
 
 
 class Cat(BaseClass):

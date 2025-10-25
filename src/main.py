@@ -3,8 +3,9 @@ import sys
 
 from logger import setup
 from parser.setup import Parser
-from src.commands import cat, cd, cp, ls, mv, rm
+from src.archive import history
 from src.errors import ShellError
+from src.file_commands import cat, cd, cp, ls, mv, rm
 
 
 class Terminal:
@@ -15,6 +16,7 @@ class Terminal:
         self.ls = ls.Ls()
         self.rm = rm.Rm()
         self.mv = mv.Mv()
+        self.history = history.History()
         self.parser = Parser()
 
         self.COMMANDS = {
@@ -24,6 +26,7 @@ class Terminal:
             "ls": self.ls.execute,
             "rm": self.rm.execute,
             "mv": self.mv.execute,
+            "history": self.history.execute,
         }
 
     def run(self):
@@ -38,6 +41,9 @@ class Terminal:
                     self.COMMANDS[tokens.command](tokens)
                 else:
                     print(f"Неизвестная команда: {tokens.command}")
+
+                self.history.add_history(line)
+
             except ShellError as message:
                 print(f"{message}")
                 continue

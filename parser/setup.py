@@ -63,7 +63,18 @@ class Parser:
         cd_parser = self.subparsers.add_parser(
             "cd", help="Переход в указанный каталог"
         )
-        cd_parser.add_argument("paths", nargs=1, help="Указанный каталог")
+        cd_parser.add_argument("paths", nargs="*", help="Указанный каталог")
+
+        history_parser = self.subparsers.add_parser(
+            "history", help="Показать историю последних команд"
+        )
+        history_parser.add_argument(
+            "count",
+            type=int,
+            nargs="?",
+            default=10,
+            help="Количество последних команд",
+        )
 
     def parse(self, arguments: list):
         try:

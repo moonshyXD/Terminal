@@ -1,8 +1,8 @@
 import argparse
 import os
 
-from src.commands.base_command import BaseClass
 from src.errors import ShellError
+from src.file_commands.base_command import BaseClass
 
 
 class Cd(BaseClass):

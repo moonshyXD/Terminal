@@ -2,8 +2,8 @@ import argparse
 import os
 import shutil
 
-from src.commands.base_command import BaseClass
 from src.errors import DeletingError, ShellError
+from src.file_commands.base_command import BaseClass
 
 
 class Rm(BaseClass):

@@ -3,8 +3,8 @@ import os
 import stat
 from datetime import datetime
 
-from src.commands.base_command import BaseClass
 from src.errors import ShellError
+from src.file_commands.base_command import BaseClass
 
 
 class Ls(BaseClass):

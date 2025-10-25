@@ -4,8 +4,8 @@ import os
 import re
 import shutil
 
-from src.commands.base_command import BaseClass
 from src.errors import ShellError
+from src.file_commands.base_command import BaseClass
 
 
 class Cp(BaseClass):
