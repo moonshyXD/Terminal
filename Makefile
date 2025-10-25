@@ -2,11 +2,10 @@ PYTHON = python3
 
 .PHONY: lint
 lint:
-	@echo "Запуск ruff..."
+	@echo "Запуск линтера"
 	ruff format .
-	@echo "Запуск ruff check --fix..."
 	ruff check --fix
-	@echo "Запуск mypy..."
+	isort .
 	mypy .
 
 .PHONY: run

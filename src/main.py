@@ -3,7 +3,7 @@ import sys
 
 from logger import setup
 from parser.setup import Parser
-from src.commands import cat, cd, cp, ls, rm
+from src.commands import cat, cd, cp, ls, mv, rm
 from src.errors import ShellError
 
 
@@ -14,6 +14,7 @@ class Terminal:
         self.cp = cp.Cp()
         self.ls = ls.Ls()
         self.rm = rm.Rm()
+        self.mv = mv.Mv()
         self.parser = Parser()
 
         self.COMMANDS = {
@@ -21,7 +22,8 @@ class Terminal:
             "cd": self.cd.execute,
             "cp": self.cp.execute,
             "ls": self.ls.execute,
-            "rm": self.rm.execute
+            "rm": self.rm.execute,
+            "mv": self.mv.execute,
         }
 
     def run(self):
@@ -39,11 +41,6 @@ class Terminal:
             except ShellError as message:
                 print(f"{message}")
                 continue
-            except KeyboardInterrupt:
-                print("\nВыход...")
-                break
-            except EOFError:
-                break
             except Exception as e:
                 print(f"Неожиданная ошибка: {e}")
                 continue

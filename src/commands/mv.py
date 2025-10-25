@@ -1,26 +1,33 @@
 import argparse
+import logging
 import os
+import shutil
 
-from commands.base_command import BaseClass
-from errors import ShellError
+from src.commands.base_command import BaseClass
+from src.errors import PathNotFoundError, ShellError
 
 
 class Mv(BaseClass):
     def execute(self, tokens: argparse.Namespace):
         if not tokens.paths:
-            paths = [os.path.expanduser("~")]
-        else:
-            paths = tokens.paths
+            message = "No such file or directory"
+            logging.error(message)
+            raise PathNotFoundError(message) from None
+
+        paths = tokens.paths
 
         try:
-            abs_path = self._abs_path(paths[0])
+            abs_from_path = self._abs_path(paths[0])
+            abs_to_path = self._abs_path(paths[1])
 
             self._start_execution(paths)
-            self._path_exists(abs_path)
-            self._is_directory(abs_path)
+            self._path_exists(abs_from_path)
 
-            os.chdir(abs_path)
-            print(f"Текущая директория: {os.getcwd()}")
+            if os.path.exists(abs_to_path):
+                os.rename(abs_from_path, abs_to_path)
+            else:
+                shutil.move(abs_from_path, abs_to_path)
+
         except Exception as message:
             self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
