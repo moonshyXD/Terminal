@@ -7,13 +7,16 @@ from src.file_commands.base_command import BaseClass
 
 
 class Rm(BaseClass):
+    def __init__(self):
+        self.trash_path = os.path.join(os.getcwd(), "src/archive/.trash")
+
     def execute(self, tokens: argparse.Namespace):
         if not tokens.paths:
             paths = [os.path.expanduser("~")]
         else:
             paths = tokens.paths
 
-        directory = tokens.r
+        directory = tokens.r or tokens.recursive
         try:
             abs_path = self._abs_path(paths[0])
 
@@ -26,13 +29,15 @@ class Rm(BaseClass):
                 print("Are you sure that you wanna delete this? [y/n]")
                 accept = input()
                 if accept == "y":
-                    shutil.rmtree(abs_path)
+                    shutil.move(abs_path, self.trash_path)
                 else:
                     print("Cancel deleting...")
 
             else:
                 self._is_file(abs_path)
-                os.remove(abs_path)
+                shutil.move(abs_path, self.trash_path)
+
+            tokens.paths += [os.getcwd()]
 
         except Exception as message:
             self._failure_execution(paths, str(message))

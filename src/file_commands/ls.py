@@ -14,22 +14,27 @@ class Ls(BaseClass):
         else:
             paths = [os.getcwd()]
 
-        detailed = tokens.l
+        detailed = tokens.l or tokens.long
 
         try:
-            abs_path = self._abs_path(paths[0])
-
             log_args = ["-l"] + paths if detailed else paths
-            self._start_execution(log_args)
-            self._path_exists(abs_path)
-            self._is_directory(abs_path)
 
-            items = os.listdir(abs_path)
+            for path in paths:
+                abs_path = self._abs_path(path)
 
-            if detailed:
-                self._print_detailed(items, abs_path)
-            else:
-                self._print_not_detailed(items)
+                self._start_execution(log_args)
+                self._path_exists(abs_path)
+                self._is_directory(abs_path)
+
+                items = os.listdir(abs_path)
+
+                print(f"{path}:")
+                if detailed:
+                    self._print_detailed(items, abs_path)
+                else:
+                    self._print_not_detailed(items)
+
+                print()
         except Exception as message:
             self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
@@ -39,7 +44,9 @@ class Ls(BaseClass):
             item_path = os.path.join(abs_path, item)
 
             stats = os.stat(item_path)
+
             mode = stat.filemode(stats.st_mode)
+
             item_size = stats.st_size
 
             mtime = datetime.fromtimestamp(stats.st_mtime)

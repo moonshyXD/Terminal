@@ -1,0 +1,149 @@
+0 Initial command1 ls
+1 ls
+2 ls
+3 ls
+4 ls
+5 ls
+6 ls -l
+7 cd src
+8 ls
+9 ls
+10 ls
+11 cd ..
+12 ls
+13 ls
+14 ls
+15 ls
+16 cd src
+17 cd file_commands
+18 cd ..
+19 cd ..
+20 ls
+21 ls -l
+22 cat README.md
+23 ls
+24 ls
+25 ls -l
+26 cd src
+27 ls -l
+28 history
+29 ls
+30 ls
+31 ls
+32 ls
+33 ls
+34 history 20
+35 ls
+36 ls
+37 ls
+38 ls
+39 ls -lllllllllll
+40 ls -llllllllllllllllllllll
+41 ls
+42 cp mypy.ini jjBH!?dsadnjadnaj`mfmdksfkakfa.ini
+43 cp mypy.ini "dkmaskmdkjajkdajkdkakda"
+44 cp mypy.ini 'kjdjasjdkasjkdjasdjkakdas'
+45 cp mypy.ini 'dadajsdjaksd adjkksajdjkajkdas djisdkakdklasd'
+46 cp mypy.ini zalupa
+47 cp zalupa huy
+48 cp mypy.ini huy
+49 undo
+50 cp mypy.ini huy
+51 rm huy
+52 cp uv.lock huy
+53 rm huy
+54 cp uv.lock huy
+55 undo
+56 cp uv.lock huy
+57 rm huy
+58 cp uv.lock huy
+59 undo
+60 cp uv.lock huy
+61 rm huy
+62 cp uv.lock huy
+63 rm huy
+64 cp uv.lock huy
+65 rm huy
+66 undo
+67 cp uv.lock huy
+68 rm huy
+69 undo
+70 mv huy src
+71 cp uv.lock huy
+72 mv huy tests
+73 cd tests
+74 mv huy /mnt/c/Projects/Laba_Python/FileManager/
+75 cd tests
+76 cd ..
+77 mv huy tests
+78 undo
+79 cp uv.lock huy
+80 mv huy tests
+81 undo
+82 mv huy tests
+83 undo
+84 cp uv.lock huy
+85 mv huy tests
+86 undo
+87 rm huy
+88 undo
+89 cp huy huy2
+90 undo
+91 ls
+92 ls
+93 ls
+94 ls
+95 ls
+96 ls
+97 ls
+98 ls -l
+99 history
+100 history
+101 history 10
+102 history
+103 history
+104 history
+105 ls
+106 ls
+107 ls
+108 history
+109 history
+110 ls -l tests
+111 ls -l
+112 ls
+113 ls src tests
+114 ls -l
+115 ls -l src tests
+116 ls src tests
+117 ls
+118 ls
+119 ls
+120 ls
+121 ls -l
+122 ls -l src tests
+123 ls
+124 ls -l
+125 ls src tests
+126 ls -l src tests
+127 ls src tests
+128 ls src tests
+129 ls -l src tests
+130 ls src tests
+131 ls src tests
+132 ls src tests
+133 ls src tests
+134 ls src tests
+135 ls -l src tests
+136 ls -long
+137 ls -long
+138 ls -long
+139 ls -l
+140 ls -long src tests
+141 zip tests huy
+142 unzip huy.zip
+143 unzip huy
+144 unzip huy.zip
+145 zip tests huy
+146 unzip huy.zip
+147 unzip huy.zip
+148 history

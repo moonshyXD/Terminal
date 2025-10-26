@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+import re
 import shutil
 
 from src.errors import MovingError, PathNotFoundError, ShellError
@@ -37,6 +38,18 @@ class Mv(BaseClass):
 
             shutil.move(abs_from_path, abs_to_path)
 
+            self._optimize_paths_for_undo(tokens)
         except Exception as message:
             self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
+
+    def _optimize_paths_for_undo(self, tokens: argparse.Namespace):
+        match = re.search(r"([^/]+)/?$", tokens.paths[0])
+        if match:
+            moved_element = match.group(1)
+
+            tokens.paths[1] = os.path.join(os.getcwd(), tokens.paths[1])
+            tokens.paths[1] = os.path.join(tokens.paths[1], moved_element)
+            tokens.paths[0] = os.getcwd()
+        else:
+            raise ShellError("Ошибка mv.py")

@@ -3,9 +3,10 @@ import sys
 
 from logger import setup
 from parser.setup import Parser
-from src.archive import history
+from src.archive import unzip, zip
 from src.errors import ShellError
 from src.file_commands import cat, cd, cp, ls, mv, rm
+from src.history import history, undo
 
 
 class Terminal:
@@ -17,6 +18,9 @@ class Terminal:
         self.rm = rm.Rm()
         self.mv = mv.Mv()
         self.history = history.History()
+        self.undo = undo.Undo()
+        self.zip = zip.Zip()
+        self.unzip = unzip.Unzip()
         self.parser = Parser()
 
         self.COMMANDS = {
@@ -27,6 +31,9 @@ class Terminal:
             "rm": self.rm.execute,
             "mv": self.mv.execute,
             "history": self.history.execute,
+            "undo": self.undo.execute,
+            "zip": self.zip.execute,
+            "unzip": self.unzip.execute,
         }
 
     def run(self):
@@ -43,6 +50,9 @@ class Terminal:
                     print(f"Неизвестная команда: {tokens.command}")
 
                 self.history.add_history(line)
+
+                if tokens.command in ["cp", "rm", "mv"]:
+                    self.undo.last_tokens = tokens
 
             except ShellError as message:
                 print(f"{message}")

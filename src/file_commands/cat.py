@@ -9,7 +9,7 @@ from src.file_commands.base_command import BaseClass
 class Cat(BaseClass):
     def execute(self, tokens: argparse.Namespace) -> None:
         if not tokens.paths:
-            message = "No such file or directory"
+            message = "Missing file operand"
             logging.error(message)
             raise PathNotFoundError(message) from None
 

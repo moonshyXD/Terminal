@@ -16,7 +16,7 @@ class Cp(BaseClass):
             raise ShellError(message) from None
 
         paths = tokens.paths
-        directory = tokens.r
+        directory = tokens.r or tokens.recursive
 
         try:
             abs_from_path = self._abs_path(paths[0])
@@ -32,7 +32,6 @@ class Cp(BaseClass):
                 match = re.search(r"([^/]+)/?$", abs_from_path)
                 if match is not None:
                     copied_directory = match.group(1)
-                    print(copied_directory)
                 else:
                     raise ShellError(f"Invalid path: {abs_from_path}")
 
