@@ -8,7 +8,7 @@ from src.file_commands.base_command import BaseClass
 
 class Rm(BaseClass):
     def __init__(self):
-        self.trash_path = os.path.join(os.getcwd(), "src/archive/.trash")
+        self.trash_path = os.path.join(os.getcwd(), "src/history/.trash")
 
     def execute(self, tokens: argparse.Namespace):
         if not tokens.paths:

@@ -39,6 +39,7 @@ class Terminal:
     def run(self):
         setup.setup_logging()
         initial_dir = os.getcwd()
+        self.undo.cleat_undo_history()
         print(f"Начальная директория: {initial_dir}")
 
         for line in sys.stdin:
@@ -51,14 +52,22 @@ class Terminal:
 
                 self.history.add_history(line)
 
-                if tokens.command in ["cp", "rm", "mv"]:
-                    self.undo.last_tokens = tokens
+                if tokens.command == "rm":
+                    undo_line = f"{line.strip()} {os.getcwd()}\n"
+                    self.undo.add_undo_history(undo_line)
+
+                if tokens.command == "mv":
+                    path_from = os.path.join(os.getcwd(), tokens.paths[1])
+                    path_to = os.getcwd()
+                    undo_line = f"{tokens.command} {path_from} {path_to}\n"
+
+                    self.undo.add_undo_history(undo_line)
+
+                if tokens.command in ["cp"]:
+                    self.undo.add_undo_history(line)
 
             except ShellError as message:
                 print(f"{message}")
-                continue
-            except Exception as e:
-                print(f"Неожиданная ошибка: {e}")
                 continue
 
         os.chdir(initial_dir)

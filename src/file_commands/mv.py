@@ -18,25 +18,29 @@ class Mv(BaseClass):
         paths = tokens.paths
 
         try:
-            abs_from_path = self._abs_path(paths[0])
-            abs_to_path = self._abs_path(paths[1])
-
+            abs_to_path = self._abs_path(paths[len(paths) - 1])
             self._start_execution(paths)
 
-            self._path_exists(abs_from_path)
+            for path in paths:
+                if path == abs_to_path:
+                    continue
 
-            if not os.access(abs_from_path, os.R_OK):
-                message = f"Cannot access '{paths[0]}': Permission denied"
-                logging.error(message)
-                raise MovingError(message)
+                abs_from_path = self._abs_path(path)
 
-            target_dir = os.path.dirname(abs_to_path) or "."
-            if not os.access(target_dir, os.W_OK):
-                message = f"Cannot move to '{paths[1]}': Permission denied"
-                logging.error(message)
-                raise MovingError(message)
+                self._path_exists(abs_from_path)
 
-            shutil.move(abs_from_path, abs_to_path)
+                if not os.access(abs_from_path, os.R_OK):
+                    message = f"Cannot access '{paths[0]}': Permission denied"
+                    logging.error(message)
+                    raise MovingError(message)
+
+                target_dir = os.path.dirname(abs_to_path) or "."
+                if not os.access(target_dir, os.W_OK):
+                    message = f"Cannot move to '{paths[1]}': Permission denied"
+                    logging.error(message)
+                    raise MovingError(message)
+
+                shutil.move(abs_from_path, abs_to_path)
 
             self._optimize_paths_for_undo(tokens)
         except Exception as message:
