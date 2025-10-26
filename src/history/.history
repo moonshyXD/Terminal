@@ -157,3 +157,38 @@
 156 undo
 157 mv huy3 huy4 huy5 tests
 158 undo
+159 cp uv.lock huy
+160 cp huy huy2 huy3
+161 cp uv.lock huy
+162 cp huy huy2
+163 cp huy2 huy3
+164 rm huy huy2 huy3
+165 undo
+166 cp uv.lock huy
+167 cp huy huy2
+168 cp huy huy3
+169 undo
+170 cp huy2 huy3
+171 cp huy3 huy4
+172 rm huy3 huy2 huy4
+173 rm huy2 huy3 huy4
+174 rm huy2 huy3 huy4
+175 undo
+176 rm huy2 huy3 huy4
+177 undo
+178 mv huy2 huy3 huy4 tests
+179 undo
+180 mv huy2 huy3 huy4 tests
+181 undo
+182 rm huy2 huy3 huy4
+183 undo
+184 rm -r tests
+185 undo
+186 cp huy2 huy 100 huy200
+187 undo
+188 cp huy2 huy3
+189 cp huy2 huy5
+190 cp huy3 huy6
+191 undo
+192 undo
+193 undo

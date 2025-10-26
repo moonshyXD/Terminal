@@ -9,6 +9,9 @@ from src.file_commands.base_command import BaseClass
 class Rm(BaseClass):
     def __init__(self):
         self.trash_path = os.path.join(os.getcwd(), "src/history/.trash")
+        self.undo_history_path = os.path.join(
+            os.getcwd(), "src/history/.undo_history"
+        )
 
     def execute(self, tokens: argparse.Namespace):
         if not tokens.paths:
@@ -17,31 +20,47 @@ class Rm(BaseClass):
             paths = tokens.paths
 
         directory = tokens.r or tokens.recursive
+
         try:
-            abs_path = self._abs_path(paths[0])
-
             self._start_execution(paths)
-            self._path_exists(abs_path)
 
-            if directory:
-                self._is_directory(abs_path)
-                self._is_root(abs_path)
-                print("Are you sure that you wanna delete this? [y/n]")
-                accept = input()
-                if accept == "y":
-                    shutil.move(abs_path, self.trash_path)
+            for path in paths:
+                abs_path = self._abs_path(path)
+                self._path_exists(abs_path)
+
+                if directory:
+                    self._is_directory(abs_path)
+                    self._is_root(abs_path)
+                    print(f"Are you sure that you wanna delete {path}? [y/n]")
+                    accept = input()
+                    if accept == "y":
+                        filename = os.path.basename(abs_path)
+                        shutil.move(
+                            abs_path, os.path.join(self.trash_path, filename)
+                        )
+
+                        self._save_undo_info(filename, os.getcwd())
+                    else:
+                        print(f"Cancel deleting {path}...")
+                        continue
                 else:
-                    print("Cancel deleting...")
+                    self._is_file(abs_path)
+                    filename = os.path.basename(abs_path)
+                    shutil.move(
+                        abs_path, os.path.join(self.trash_path, filename)
+                    )
 
-            else:
-                self._is_file(abs_path)
-                shutil.move(abs_path, self.trash_path)
-
-            tokens.paths += [os.getcwd()]
+                    self._save_undo_info(filename, os.getcwd())
 
         except Exception as message:
             self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
+
+    def _save_undo_info(self, filename: str, original_dir: str):
+        undo_line = f"rm {filename} {original_dir}\n"
+
+        with open(self.undo_history_path, "a", encoding="utf-8") as file:
+            file.write(undo_line)
 
     def _is_root(self, path: str):
         root_paths = [

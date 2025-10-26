@@ -56,10 +56,6 @@ class Terminal:
 
                 self.history.add_history(line)
 
-                if tokens.command == "rm":
-                    undo_line = f"{line.strip()} {os.getcwd()}\n"
-                    self.undo.add_undo_history(undo_line)
-
                 if tokens.command in ["cp"]:
                     self.undo.add_undo_history(line)
 

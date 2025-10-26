@@ -22,13 +22,12 @@ class Undo(BaseClass):
         }
 
     def execute(self, tokens: argparse.Namespace):
-        last_commands = self._get_last_mv_group()
+        last_commands = self._get_last_command_group()
 
         if not last_commands:
             last_cmd = self._get_last_command()
             if not last_cmd:
                 raise UndoError("Commands to undo not found")
-
             last_commands = [last_cmd]
 
         for cmd in last_commands:
@@ -38,22 +37,29 @@ class Undo(BaseClass):
 
         self._remove_last_lines(len(last_commands))
 
-    def _get_last_mv_group(self):
+    def _get_last_command_group(self):
         try:
             with open(self.undo_history_path, "r", encoding="utf-8") as file:
                 lines = file.readlines()
 
-            if not lines or not lines[-1].strip().startswith("mv "):
+            if not lines:
                 return []
 
-            result = []
-            for line in reversed(lines):
-                if line.strip().startswith("mv "):
-                    result.insert(0, line)
-                else:
-                    break
+            last_cmd = (
+                lines[-1].strip().split()[0] if lines[-1].strip() else ""
+            )
 
-            return result
+            if last_cmd in ["mv", "rm"]:
+                result = []
+                for line in reversed(lines):
+                    cmd = line.strip().split()[0] if line.strip() else ""
+                    if cmd == last_cmd:
+                        result.insert(0, line)
+                    else:
+                        break
+                return result
+
+            return []
         except FileNotFoundError:
             raise PathNotFoundError("File not found") from None
 
@@ -84,14 +90,20 @@ class Undo(BaseClass):
         shutil.move(abs_from_path, abs_to_path)
 
     def _undo_rm(self, tokens: argparse.Namespace):
-        abs_from_path = os.path.join(self.undo_trash_path, tokens.paths[0])
-        abs_to_path = tokens.paths[1]
+        filename = tokens.paths[0]
+        restore_dir = tokens.paths[1]
+
+        abs_from_path = os.path.join(self.undo_trash_path, filename)
+        abs_to_path = os.path.join(restore_dir, filename)
 
         shutil.move(abs_from_path, abs_to_path)
 
     def _get_last_command(self):
-        with open(self.undo_history_path, "r", encoding="utf-8") as file:
-            return "".join(deque(file, maxlen=1))
+        try:
+            with open(self.undo_history_path, "r", encoding="utf-8") as file:
+                return "".join(deque(file, maxlen=1))
+        except FileNotFoundError:
+            return ""
 
     def add_undo_history(self, command: str):
         with open(self.undo_history_path, "a", encoding="utf-8") as file:
