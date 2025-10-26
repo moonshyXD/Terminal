@@ -3,7 +3,7 @@ import sys
 
 from logger import setup
 from parser.setup import Parser
-from src.archive import unzip, zip
+from src.archive import tar, untar, unzip, zip
 from src.errors import ShellError
 from src.file_commands import cat, cd, cp, ls, mv, rm
 from src.history import history, undo
@@ -21,6 +21,8 @@ class Terminal:
         self.undo = undo.Undo()
         self.zip = zip.Zip()
         self.unzip = unzip.Unzip()
+        self.tar = tar.Tar()
+        self.untar = untar.Untar()
         self.parser = Parser()
 
         self.COMMANDS = {
@@ -34,12 +36,14 @@ class Terminal:
             "undo": self.undo.execute,
             "zip": self.zip.execute,
             "unzip": self.unzip.execute,
+            "tar": self.tar.execute,
+            "untar": self.untar.execute,
         }
 
     def run(self):
         setup.setup_logging()
         initial_dir = os.getcwd()
-        self.undo.cleat_undo_history()
+        self.undo.clear_undo_history()
         print(f"Начальная директория: {initial_dir}")
 
         for line in sys.stdin:

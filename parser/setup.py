@@ -39,6 +39,8 @@ class Parser:
         self._undo_setup()
         self._zip_setup()
         self._unzip_setup()
+        self._tar_setup()
+        self._untar_setup()
 
     def _ls_setup(self):
         ls_parser = self.subparsers.add_parser(
@@ -134,5 +136,21 @@ class Parser:
             "unzip", help="Распаковка архива ZIP в текущий каталога"
         )
         unzip_parser.add_argument(
+            "paths", nargs="*", help="Директория для разархивации"
+        )
+
+    def _tar_setup(self):
+        tar_parser = self.subparsers.add_parser(
+            "tar", help="Cоздание архива формата TAR из каталога"
+        )
+        tar_parser.add_argument(
+            "paths", nargs="*", help="Директория для архивации"
+        )
+
+    def _untar_setup(self):
+        untar_parser = self.subparsers.add_parser(
+            "untar", help="Распаковка архива TAR в текущий каталога"
+        )
+        untar_parser.add_argument(
             "paths", nargs="*", help="Директория для разархивации"
         )

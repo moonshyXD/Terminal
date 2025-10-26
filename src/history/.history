@@ -88,3 +88,57 @@
 87 rm huy
 88 undo
 89 rm huy
+90 cp uv.lock huy
+91 zip tests huy
+92 unzip huy.zip
+93 cp uv.lock huy
+94 tar tests huy2'
+95 untar huy2'.tar.gz
+96 tar tests huy2
+97 untar huy2.tar.gz
+98 rm -r huy2
+99 rm -r huy2'
+100 tar tests huy
+101 untar huy.tar.gz
+102 untar huy.tar.gz
+103 untar huy.tar.gz
+104 untar huy.tar.gz
+105 tar tests huy
+106 untar huy.tar.gz
+107 tar tests huy2
+108 untar huy2.tar.gz
+109 untar huy2.tar.gz
+110 untar huy2.tar.gz
+111 untar huy2.tar.gz
+112 untar huy2.tar.gz
+113 untar huy2.tar.gz
+114 rm huy2.tar.gz
+115 tar tests huy2
+116 untar huy2.tar.gz
+117 untar huy2.tar.gz
+118 untar huy2.tar.gz
+119 ls
+120 ls -l
+121 untar huy2.tar.gz
+122 untar huy2.tar.gz
+123 untar huy2.tar.gz
+124 tar tests huy2
+125 untar huy2.tar.gz
+126 untar huy2.tar.gz
+127 untar huy2.tar.gz
+128 untar huy2.tar.gz
+129 tar tests huy2
+130 untar huy2.tar.gz
+131 tar tests huy2
+132 untar huy2.tar.gz
+133 tar tests huy2
+134 untar huy2.tar.gz
+135 tar tests /mnt/c/Projects/Laba_Python/FileManager/huy2
+136 tar tests /mnt/c/Projects/Laba_Python/FileManager/huy3
+137 untar huy3.tar.gz
+138 rm -r huy2
+139 rm huy2.tar.gz
+140 rm huy3.tar.gz
+141 tar tests /mnt/c/Projects/Laba_Python/FileManager/huy3
+142 untar huy3.tar.gz
+143 rm -r huy3
