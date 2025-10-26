@@ -26,7 +26,7 @@ class Tar(BaseClass):
             if not archive_path.endswith((".tar.gz", ".tgz")):
                 archive_path += ".tar.gz"
 
-            archive_name = paths[1].replace('.tar.gz', '').replace('.tgz', '')
+            archive_name = paths[1].replace(".tar.gz", "").replace(".tgz", "")
             match = re.search(r"([^/]+)/?$", archive_name)
             if match is not None:
                 archive_name = match.group(1)

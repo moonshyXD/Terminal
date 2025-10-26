@@ -9,6 +9,11 @@ from src.file_commands.base_command import BaseClass
 
 
 class Mv(BaseClass):
+    def __init__(self):
+        self.undo_history_path = os.path.join(
+            os.getcwd(), "src/history/.undo_history"
+        )
+
     def execute(self, tokens: argparse.Namespace):
         if not tokens.paths or len(tokens.paths) < 2:
             message = "Missing file operand"
@@ -48,12 +53,19 @@ class Mv(BaseClass):
             raise ShellError(str(message)) from None
 
     def _optimize_paths_for_undo(self, tokens: argparse.Namespace):
-        match = re.search(r"([^/]+)/?$", tokens.paths[0])
-        if match:
-            moved_element = match.group(1)
+        for path in tokens.paths[:-1]:
+            match = re.search(r"([^/]+)/?$", path)
+            if match:
+                moved_element = match.group(1)
 
-            tokens.paths[1] = os.path.join(os.getcwd(), tokens.paths[1])
-            tokens.paths[1] = os.path.join(tokens.paths[1], moved_element)
-            tokens.paths[0] = os.getcwd()
-        else:
-            raise ShellError("Ошибка mv.py")
+                destination = os.path.join(os.getcwd(), tokens.paths[-1])
+                final_path = os.path.join(destination, moved_element)
+
+                original_dir = os.getcwd()
+
+                undo_line = f"mv {final_path} {original_dir}\n"
+
+                with open(
+                    self.undo_history_path, "a", encoding="utf-8"
+                ) as file:
+                    file.write(undo_line)

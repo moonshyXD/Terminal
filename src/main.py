@@ -60,13 +60,6 @@ class Terminal:
                     undo_line = f"{line.strip()} {os.getcwd()}\n"
                     self.undo.add_undo_history(undo_line)
 
-                if tokens.command == "mv":
-                    path_from = os.path.join(os.getcwd(), tokens.paths[1])
-                    path_to = os.getcwd()
-                    undo_line = f"{tokens.command} {path_from} {path_to}\n"
-
-                    self.undo.add_undo_history(undo_line)
-
                 if tokens.command in ["cp"]:
                     self.undo.add_undo_history(line)
 

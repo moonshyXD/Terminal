@@ -4,6 +4,7 @@ import shutil
 from collections import deque
 
 from parser.setup import Parser
+from src.errors import PathNotFoundError, UndoError
 from src.file_commands.base_command import BaseClass
 
 
@@ -21,10 +22,52 @@ class Undo(BaseClass):
         }
 
     def execute(self, tokens: argparse.Namespace):
-        last_tokens = self.parser.parse(
-            self._get_last_command().strip().split()
-        )
-        self.COMMANDS[last_tokens.command](last_tokens)
+        last_commands = self._get_last_mv_group()
+
+        if not last_commands:
+            last_cmd = self._get_last_command()
+            if not last_cmd:
+                raise UndoError("Commands to undo not found")
+
+            last_commands = [last_cmd]
+
+        for cmd in last_commands:
+            parsed_tokens = self.parser.parse(cmd.strip().split())
+            if parsed_tokens.command in self.COMMANDS:
+                self.COMMANDS[parsed_tokens.command](parsed_tokens)
+
+        self._remove_last_lines(len(last_commands))
+
+    def _get_last_mv_group(self):
+        try:
+            with open(self.undo_history_path, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+
+            if not lines or not lines[-1].strip().startswith("mv "):
+                return []
+
+            result = []
+            for line in reversed(lines):
+                if line.strip().startswith("mv "):
+                    result.insert(0, line)
+                else:
+                    break
+
+            return result
+        except FileNotFoundError:
+            raise PathNotFoundError("File not found") from None
+
+    def _remove_last_lines(self, count: int):
+        try:
+            with open(self.undo_history_path, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+
+            remaining = lines[:-count] if count < len(lines) else []
+
+            with open(self.undo_history_path, "w", encoding="utf-8") as file:
+                file.writelines(remaining)
+        except FileNotFoundError:
+            raise PathNotFoundError("File not found") from None
 
     def _undo_cp(self, tokens: argparse.Namespace):
         abs_from_path = tokens.paths[1]
@@ -38,15 +81,12 @@ class Undo(BaseClass):
         abs_from_path = tokens.paths[0]
         abs_to_path = tokens.paths[1]
 
-        print(abs_from_path, abs_to_path)
-
         shutil.move(abs_from_path, abs_to_path)
 
     def _undo_rm(self, tokens: argparse.Namespace):
         abs_from_path = os.path.join(self.undo_trash_path, tokens.paths[0])
         abs_to_path = tokens.paths[1]
 
-        print(abs_from_path, abs_to_path)
         shutil.move(abs_from_path, abs_to_path)
 
     def _get_last_command(self):

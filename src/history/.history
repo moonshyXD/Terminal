@@ -142,3 +142,18 @@
 141 tar tests /mnt/c/Projects/Laba_Python/FileManager/huy3
 142 untar huy3.tar.gz
 143 rm -r huy3
+144 cp uv.lock huy3 huy4 huy5 huy6
+145 cp huy3 huy4
+146 cp huy4 huy5
+147 mv huy3 huy4 huy5 tests
+148 cd tests
+149 cd ..
+150 mv huy3 huy4 huy5 tests
+151 mv huy3 huy4 huy5 tests
+152 mv huy3 huy4 huy5
+153 cp huy5 huy3
+154 cp huy3 huy4
+155 mv huy3 huy4 huy5 tests
+156 undo
+157 mv huy3 huy4 huy5 tests
+158 undo

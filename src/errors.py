@@ -28,7 +28,7 @@ class NotTextFile(ShellError):
     pass
 
 
-class ParserError(Exception):
+class ParserError(ShellError):
     pass
 
 
@@ -37,4 +37,8 @@ class DeletingError(ShellError):
 
 
 class MovingError(ShellError):
+    pass
+
+
+class UndoError(ShellError):
     pass
