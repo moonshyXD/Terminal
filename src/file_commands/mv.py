@@ -10,6 +10,7 @@ from src.file_commands.base_command import BaseClass
 
 class Mv(BaseClass):
     def __init__(self):
+        self._command = self.__class__.__name__.lower()
         self.undo_history_path = os.path.join(
             os.getcwd(), "src/history/.undo_history"
         )

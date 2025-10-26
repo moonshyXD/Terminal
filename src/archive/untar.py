@@ -9,6 +9,8 @@ from src.file_commands.base_command import BaseClass
 
 class Untar(BaseClass):
     def execute(self, tokens: argparse.Namespace):
+        self._start_execution(tokens.paths)
+
         if not tokens.paths:
             message = "Missing file operand"
             logging.error(message)

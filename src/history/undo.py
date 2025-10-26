@@ -10,6 +10,7 @@ from src.file_commands.base_command import BaseClass
 
 class Undo(BaseClass):
     def __init__(self):
+        self._command = self.__class__.__name__.lower()
         self.undo_history_path = os.path.join(
             os.getcwd(), "src/history/.undo_history"
         )
@@ -22,6 +23,7 @@ class Undo(BaseClass):
         }
 
     def execute(self, tokens: argparse.Namespace):
+        self._start_execution([])
         last_commands = self._get_last_command_group()
 
         if not last_commands:
