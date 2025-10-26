@@ -41,6 +41,7 @@ class Parser:
         self._unzip_setup()
         self._tar_setup()
         self._untar_setup()
+        self._grep_setup()
 
     def _ls_setup(self):
         ls_parser = self.subparsers.add_parser(
@@ -153,4 +154,31 @@ class Parser:
         )
         untar_parser.add_argument(
             "paths", nargs="*", help="Директория для разархивации"
+        )
+
+    def _grep_setup(self):
+        grep_parser = self.subparsers.add_parser(
+            "grep", help="Поиса по указанном паттерну в файлах и полкаталогах"
+        )
+        grep_parser.add_argument(
+            "-r", action="store_true", help="Рекурсивный поиск в подкаталогах",
+        )
+        grep_parser.add_argument(
+            "-recursive",
+            action="store_true",
+            help="Рекурсивный поиск в подкаталогах",
+        )
+        grep_parser.add_argument(
+            "-i", action="store_true", help="Поиск без учёта регистра",
+        )
+        grep_parser.add_argument(
+            "-interactive",
+            action="store_true",
+            help="Поиск без учёта регистра",
+        )
+        grep_parser.add_argument(
+            "pattern", nargs="*", help="Шаблон для поиска"
+        )
+        grep_parser.add_argument(
+            "paths", nargs="*", help="Файлы или каталоги для поиска"
         )

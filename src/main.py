@@ -1,4 +1,5 @@
 import os
+import shlex
 import sys
 
 from logger import setup
@@ -6,6 +7,7 @@ from parser.setup import Parser
 from src.archive import tar, untar, unzip, zip
 from src.errors import ShellError
 from src.file_commands import cat, cd, cp, ls, mv, rm
+from src.grep import grep
 from src.history import history, undo
 
 
@@ -23,6 +25,7 @@ class Terminal:
         self.unzip = unzip.Unzip()
         self.tar = tar.Tar()
         self.untar = untar.Untar()
+        self.grep = grep.Grep()
         self.parser = Parser()
 
         self.COMMANDS = {
@@ -38,6 +41,7 @@ class Terminal:
             "unzip": self.unzip.execute,
             "tar": self.tar.execute,
             "untar": self.untar.execute,
+            "grep": self.grep.execute,
         }
 
     def run(self):
@@ -48,7 +52,7 @@ class Terminal:
 
         for line in sys.stdin:
             try:
-                tokens = self.parser.parse(line.strip().split())
+                tokens = self.parser.parse(shlex.split(line.strip()))
                 if tokens.command in self.COMMANDS:
                     self.COMMANDS[tokens.command](tokens)
                 else:
