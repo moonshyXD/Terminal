@@ -1,3 +1,4 @@
+# src/main.py
 import os
 import shlex
 import sys
@@ -50,16 +51,19 @@ class Terminal:
         self.undo.clear_undo_history()
 
         initial_directory = os.getcwd()
-        print(f"Initial directory: {initial_directory}")
+        print(f"Изначальная директория: {initial_directory}")
 
         for line in sys.stdin:
+            if not line.strip():
+                continue
+
             self.logger.start_execution(line.strip())
             try:
                 tokens = self.parser.parse(shlex.split(line.strip()))
                 if tokens.command in self.COMMANDS:
                     self.COMMANDS[tokens.command](tokens)
                 else:
-                    print(f"Unknown command: {tokens.command}")
+                    print(f"Неизвестная команда: {tokens.command}")
 
                 self.history.add_history(line)
 
@@ -69,11 +73,11 @@ class Terminal:
                 self.logger.success_execution(line.strip())
             except ShellError as message:
                 print(message)
-                self.logger.failure_execution(message.strip())
+                self.logger.failure_execution(str(message))
                 continue
 
         os.chdir(initial_directory)
-        print(f"\nBack to: {os.getcwd()}")
+        print(f"\nВернулись в: {os.getcwd()}")
 
 
 if __name__ == "__main__":

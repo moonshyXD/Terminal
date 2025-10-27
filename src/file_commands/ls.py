@@ -15,7 +15,7 @@ class Ls(BaseClass):
             else:
                 paths = [os.getcwd()]
 
-            detailed = tokens.long
+            detailed = tokens.l
 
             for path in paths:
                 abs_path = self._abs_path(path)

@@ -2,9 +2,13 @@ import argparse
 import logging
 import os
 from abc import ABC, abstractmethod
-from typing import Any
 
-from src.errors import NotADirectoryError, NotAFileError, PathNotFoundError
+from src.errors import (
+    InvalidPathError,
+    NotADirectoryError,
+    NotAFileError,
+    PathNotFoundError,
+)
 
 
 class BaseClass(ABC):
@@ -18,7 +22,7 @@ class BaseClass(ABC):
         return self._command
 
     @abstractmethod
-    def execute(self, *args: Any, **kwargs: Any) -> None:
+    def execute(self, tokens: argparse.Namespace) -> None:
         pass
 
     def _abs_path(self, path: str) -> str:
@@ -32,22 +36,33 @@ class BaseClass(ABC):
 
         return path
 
+    def _correct_path(self, path: str):
+        broken_list = ["#", "&", "(", ")", "*", "?", "'\'", "|", "<", ">", "`"]
+        for element in broken_list:
+            if element in path:
+                raise InvalidPathError(
+                    f"Элемент {element} не может быть в пути"
+                )
+
     def _path_exists(self, path: str) -> None:
+        self._correct_path(path)
         if not os.path.exists(path):
             raise PathNotFoundError(
-                f"No such file or directory {path}"
+                f"Файл или директория не найдены: {path}"
             ) from None
 
     def _is_file(self, path: str):
         if not os.path.isfile(path):
-            raise NotAFileError(f"Not a file: {path}") from None
+            raise NotAFileError(f"Не является файлом: {path}") from None
 
     def _is_directory(self, path: str):
         if not os.path.isdir(path):
-            raise NotADirectoryError(f"Not a directory: {path}") from None
+            raise NotADirectoryError(
+                f"Не является директорией: {path}"
+            ) from None
 
     def _is_tokens(self, tokens: argparse.Namespace):
         if not tokens.paths:
-            message = "Missing file operand"
+            message = "Отсутствует путь файла"
             logging.error(message)
             raise PathNotFoundError(message) from None

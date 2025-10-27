@@ -29,13 +29,19 @@ class Mv(BaseClass):
                 self._path_exists(abs_from_path)
 
                 if not os.access(abs_from_path, os.R_OK):
-                    message = f"Cannot access '{paths[0]}': Permission denied"
+                    message = (
+                        f"Невозможно получить доступ '{paths[0]}': "
+                        f"Нет прав доступа"
+                    )
                     logging.error(message)
                     raise MovingError(message)
 
                 target_dir = os.path.dirname(abs_to_path) or "."
                 if not os.access(target_dir, os.W_OK):
-                    message = f"Cannot move to '{paths[1]}': Permission denied"
+                    message = (
+                        f"Невозможно переместить '{paths[1]}': "
+                        f"Нет прав доступа"
+                    )
                     logging.error(message)
                     raise MovingError(message)
 
@@ -65,6 +71,6 @@ class Mv(BaseClass):
 
     def _is_tokens(self, tokens: argparse.Namespace):
         if not tokens.paths or len(tokens.paths) < 2:
-            message = "Missing file operand"
+            message = "Отсутствует путь файла"
             logging.error(message)
             raise PathNotFoundError(message) from None

@@ -49,7 +49,7 @@ class Parser:
             help="Отображение списка файлов в текущем рабочем каталоге",
         )
         ls_parser.add_argument(
-            "-long", "-l", action="store_true", help="Подробный вывод"
+            "-l", action="store_true", help="Подробный вывод"
         )
         ls_parser.add_argument("paths", nargs="*", help="Пути к директориям")
 
@@ -71,7 +71,7 @@ class Parser:
             help="Копирование файла или каталога из источника в назначение",
         )
         cp_parser.add_argument(
-            "-recursive",
+            "--recursive",
             "-r",
             action="store_true",
             help="Копирование директории",
@@ -93,7 +93,7 @@ class Parser:
             "rm", help="Удаление указанного файла"
         )
         rm_parser.add_argument(
-            "-recursive",
+            "--recursive",
             "-r",
             action="store_true",
             help="Рекурсивное удаление каталога",
@@ -156,14 +156,20 @@ class Parser:
             "grep", help="Поиса по указанном паттерну в файлах и полкаталогах"
         )
         grep_parser.add_argument(
-            "-recursive",
+            "--recursive",
             "-r",
             action="store_true",
             help="Рекурсивный поиск в подкаталогах",
         )
         grep_parser.add_argument(
-            "-interactive",
+            "--ignore-case",
             "-i",
+            action="store_true",
+            help="Поиск без учёта регистра",
+        )
+        grep_parser.add_argument(
+            "-ir",
+            "-ri",
             action="store_true",
             help="Поиск без учёта регистра",
         )

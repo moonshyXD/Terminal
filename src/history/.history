@@ -244,3 +244,13 @@
 243 ls
 244 ls
 245 ls
+246 ls -l
+247 ls
+248 ls
+249 ls
+250 ls
+251 ls -l
+252 grep --ignore-case 123 mypy.ini
+253 grep 123 test
+254 mv test tests
+255 undo

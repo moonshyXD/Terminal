@@ -30,7 +30,7 @@ class Rm(BaseClass):
                 if directory:
                     self._is_directory(abs_path)
                     self._is_root(abs_path)
-                    print(f"Are you sure that you wanna delete {path}? [y/n]")
+                    print(f"Вы уверены, что хотите удалить {path}? [y/n]")
                     accept = input()
                     if accept == "y":
                         filename = os.path.basename(abs_path)
@@ -40,7 +40,7 @@ class Rm(BaseClass):
 
                         self._save_undo_info(filename, os.getcwd())
                     else:
-                        print(f"Cancel deleting {path}...")
+                        print(f"Отмена удаления {path}...")
                         continue
                 else:
                     self._is_file(abs_path)
@@ -80,13 +80,13 @@ class Rm(BaseClass):
             or path == os.getcwd()
             or path == os.path.dirname(os.getcwd())
         ):
-            raise DeletingError("Cannot delete root directory")
+            raise DeletingError("Невозможно удалить корневую директорию")
 
-        ancestor = os.path.normpath(path)
+        parent_dir = os.path.normpath(path)
         target = os.path.normpath(os.getcwd())
 
-        if not ancestor.endswith(os.sep):
-            ancestor += os.sep
+        if not parent_dir.endswith(os.sep):
+            parent_dir += os.sep
 
-        if target.startswith(ancestor):
-            raise DeletingError("Cannot delete parent directory")
+        if target.startswith(parent_dir):
+            raise DeletingError("Невозможно удалить родительскую директорию")

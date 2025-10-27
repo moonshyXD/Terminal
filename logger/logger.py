@@ -1,7 +1,7 @@
 import logging
 
 
-class Logger():
+class Logger:
     def setup_logging(self):
         logging.basicConfig(
             filename="logger/shell.log",

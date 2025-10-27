@@ -4,7 +4,11 @@ import re
 import tarfile
 
 from src.errors import ShellError
-from src.file_commands.base_command import BaseClass, PathNotFoundError
+from src.file_commands.base_command import (
+    BaseClass,
+    InvalidPathError,
+    PathNotFoundError,
+)
 
 
 class Tar(BaseClass):
@@ -27,7 +31,7 @@ class Tar(BaseClass):
             if match is not None:
                 archive_name = match.group(1)
             else:
-                raise ShellError(f"Invalid path: {archive_name}")
+                raise InvalidPathError(f"Неверый путь: {archive_name}")
 
             self._tar(folder_tar, archive_path, archive_name)
 
@@ -40,6 +44,6 @@ class Tar(BaseClass):
 
     def _is_tokens(self, tokens: argparse.Namespace):
         if not tokens.paths or len(tokens.paths) < 2:
-            message = "Missing file operand"
+            message = "Отсутствует путь файла"
             logging.error(message)
             raise PathNotFoundError(message) from None

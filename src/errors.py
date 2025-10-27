@@ -11,34 +11,54 @@ class PathNotFoundError(ShellError):
 
 
 class NotAFileError(ShellError):
-    """Объект по пути не файл"""
+    """Не является файлом"""
 
     pass
 
 
 class NotADirectoryError(ShellError):
-    """Объект по пути не папка"""
+    """Не является директорией"""
 
     pass
 
 
-class NotTextFile(ShellError):
-    """Объект по пути не текстовый"""
+class NotTextFileError(ShellError):
+    """Не является текстовым файлом"""
 
     pass
 
 
 class ParserError(ShellError):
+    """Ошибка парсинга аргументов"""
+
     pass
 
 
 class DeletingError(ShellError):
+    """Ошибка при удалении"""
+
     pass
 
 
 class MovingError(ShellError):
+    """Ошибка при перемещении"""
+
     pass
 
 
 class UndoError(ShellError):
+    """Ошибка отмены операции"""
+
+    pass
+
+
+class InvalidPathError(ShellError):
+    """Недопустимый путь"""
+
+    pass
+
+
+class InvalidFileError(ShellError):
+    """Недопустимый файл"""
+
     pass

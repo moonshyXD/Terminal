@@ -49,6 +49,6 @@ class Cp(BaseClass):
 
     def _is_tokens(self, tokens: argparse.Namespace):
         if not tokens.paths or len(tokens.paths) < 2:
-            message = "Missing file operand"
+            message = "Отсутствует путь файла"
             logging.error(message)
             raise PathNotFoundError(message) from None

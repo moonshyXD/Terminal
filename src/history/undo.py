@@ -29,7 +29,7 @@ class Undo(BaseClass):
             if not last_commands:
                 last_cmd = self._get_last_command()
                 if not last_cmd:
-                    raise UndoError("Commands to undo not found")
+                    raise UndoError("Команды для отмены не найдены")
                 last_commands = [last_cmd]
 
             for cmd in last_commands:
@@ -65,7 +65,7 @@ class Undo(BaseClass):
 
             return []
         except FileNotFoundError:
-            raise PathNotFoundError("File not found") from None
+            raise PathNotFoundError("Файл не найден") from None
 
     def _remove_last_lines(self, count: int):
         try:
@@ -77,7 +77,7 @@ class Undo(BaseClass):
             with open(self.undo_history_path, "w", encoding="utf-8") as file:
                 file.writelines(remaining)
         except FileNotFoundError:
-            raise PathNotFoundError("File not found") from None
+            raise PathNotFoundError("Файл не найден") from None
 
     def _undo_cp(self, tokens: argparse.Namespace):
         abs_from_path = tokens.paths[1]
@@ -116,6 +116,5 @@ class Undo(BaseClass):
     def clear_undo_history(self):
         with open(self.undo_history_path, "w") as _:
             pass
-
         shutil.rmtree(self.undo_trash_path)
         os.makedirs(self.undo_trash_path)
