@@ -9,13 +9,26 @@ from src.file_commands.base_command import BaseClass
 
 
 class Mv(BaseClass):
-    def __init__(self):
-        self._command = self.__class__.__name__.lower()
+    """
+    Класс для перемещения и переименования файлов и директорий
+    """
+
+    def __init__(self) -> None:
+        """
+        Инициализация команды перемещения с путём к истории отмены
+        """
         self.undo_history_path = os.path.join(
             os.getcwd(), "src/history/.undo_history"
         )
 
-    def execute(self, tokens: argparse.Namespace):
+    def execute(self, tokens: argparse.Namespace) -> None:
+        """
+        Перемещает или переименовывает файлы и директории
+        :param tokens: Аргументы команды (пути к файлам и директориям)
+        :raises ShellError: При ошибке перемещения
+        :raises MovingError: При отсутствии прав доступа
+        :raises PathNotFoundError: Если пути отсутствуют
+        """
         try:
             self._is_tokens(tokens)
 
@@ -51,7 +64,11 @@ class Mv(BaseClass):
         except Exception as message:
             raise ShellError(str(message)) from None
 
-    def _optimize_paths_for_undo(self, tokens: argparse.Namespace):
+    def _optimize_paths_for_undo(self, tokens: argparse.Namespace) -> None:
+        """
+        Сохраняет информацию о перемещённых файлах для отмены операции
+        :param tokens: Аргументы команды (пути к файлам и директориям)
+        """
         for path in tokens.paths[:-1]:
             match = re.search(r"([^/]+)/?$", path)
             if match:
@@ -69,7 +86,12 @@ class Mv(BaseClass):
                 ) as file:
                     file.write(undo_line)
 
-    def _is_tokens(self, tokens: argparse.Namespace):
+    def _is_tokens(self, tokens: argparse.Namespace) -> None:
+        """
+        Проверяет наличие необходимых путей
+        :param tokens: Аргументы команды
+        :raises PathNotFoundError: Если пути отсутствуют
+        """
         if not tokens.paths or len(tokens.paths) < 2:
             message = "Отсутствует путь файла"
             logging.error(message)

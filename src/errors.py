@@ -28,6 +28,12 @@ class NotTextFileError(ShellError):
     pass
 
 
+class CommandNotFoundError(ShellError):
+    """Команда для отмены не найдена"""
+
+    pass
+
+
 class ParserError(ShellError):
     """Ошибка парсинга аргументов"""
 

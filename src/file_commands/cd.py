@@ -6,7 +6,16 @@ from src.file_commands.base_command import BaseClass
 
 
 class Cd(BaseClass):
-    def execute(self, tokens: argparse.Namespace):
+    """
+    Класс для изменения текущей директории
+    """
+
+    def execute(self, tokens: argparse.Namespace) -> None:
+        """
+        Изменяет текущую рабочую директорию
+        :param tokens: Аргументы команды (пути к директориям)
+        :raises ShellError: При ошибке смены директории
+        """
         try:
             if not tokens.paths:
                 paths = [os.path.expanduser("~")]

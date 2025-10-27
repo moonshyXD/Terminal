@@ -6,7 +6,16 @@ from src.file_commands.base_command import BaseClass
 
 
 class Cat(BaseClass):
+    """
+    Класс для вывода содержимого файлов
+    """
+
     def execute(self, tokens: argparse.Namespace) -> None:
+        """
+        Выводит содержимое файлов в консоль
+        :param tokens: Аргументы команды (пути к файлам)
+        :raises ShellError: При ошибке чтения файла
+        """
         try:
             self._is_tokens(tokens)
 

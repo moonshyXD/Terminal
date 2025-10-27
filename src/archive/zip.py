@@ -8,7 +8,16 @@ from src.file_commands.base_command import BaseClass, PathNotFoundError
 
 
 class Zip(BaseClass):
-    def execute(self, tokens: argparse.Namespace):
+    """
+    Класс для создания zip архивов
+    """
+
+    def execute(self, tokens: argparse.Namespace) -> None:
+        """
+        Создаёт zip архив из директории
+        :param tokens: Аргументы команды (пути к файлу или директории)
+        :raises ShellError: При ошибке создания архива
+        """
         try:
             self._is_tokens(tokens)
             paths = tokens.paths
@@ -26,7 +35,12 @@ class Zip(BaseClass):
         except Exception as message:
             raise ShellError(str(message)) from None
 
-    def _zip(self, folder_zip: str, archive_path: str):
+    def _zip(self, folder_zip: str, archive_path: str) -> None:
+        """
+        Создаёт zip архив
+        :param folder_zip: Путь к директории для архивации
+        :param archive_path: Путь к создаваемому архиву
+        """
         with zipfile.ZipFile(
             archive_path, "w", zipfile.ZIP_DEFLATED
         ) as zip_file:
@@ -36,7 +50,12 @@ class Zip(BaseClass):
                     arcname = os.path.relpath(file_path, folder_zip)
                     zip_file.write(file_path, arcname)
 
-    def _is_tokens(self, tokens: argparse.Namespace):
+    def _is_tokens(self, tokens: argparse.Namespace) -> None:
+        """
+        Проверяет наличие необходимых путей
+        :param tokens: Аргументы команды
+        :raises PathNotFoundError: Если пути отсутствуют
+        """
         if not tokens.paths or len(tokens.paths) < 2:
             message = "Отсутствует путь файла"
             logging.error(message)

@@ -12,7 +12,17 @@ from src.file_commands.base_command import (
 
 
 class Tar(BaseClass):
-    def execute(self, tokens: argparse.Namespace):
+    """
+    Класс для создания tar.gz архивов
+    """
+
+    def execute(self, tokens: argparse.Namespace) -> None:
+        """
+        Создаёт tar.gz архив из директории
+        :param tokens: Аргументы команды (пути к файлам и директориям)
+        :raises ShellError: При ошибке создания архива
+        :raises InvalidPathError: Если путь содержит недопустимые символы
+        """
         try:
             self._is_tokens(tokens)
             paths = tokens.paths
@@ -31,18 +41,31 @@ class Tar(BaseClass):
             if match is not None:
                 archive_name = match.group(1)
             else:
-                raise InvalidPathError(f"Неверый путь: {archive_name}")
+                raise InvalidPathError(f"Неверный путь: {archive_name}")
 
             self._tar(folder_tar, archive_path, archive_name)
 
         except Exception as message:
             raise ShellError(str(message)) from None
 
-    def _tar(self, folder_tar: str, archive_path: str, archive_name: str):
+    def _tar(
+        self, folder_tar: str, archive_path: str, archive_name: str
+    ) -> None:
+        """
+        Создаёт tar.gz архив
+        :param folder_tar: Путь к директории для архивации
+        :param archive_path: Путь к создаваемому архиву
+        :param archive_name: Имя архива внутри tar
+        """
         with tarfile.open(archive_path, "w:gz") as tar:
             tar.add(folder_tar, arcname=archive_name)
 
-    def _is_tokens(self, tokens: argparse.Namespace):
+    def _is_tokens(self, tokens: argparse.Namespace) -> None:
+        """
+        Проверяет наличие необходимых путей
+        :param tokens: Аргументы команды (пути к файлам и директориям)
+        :raises PathNotFoundError: Если пути отсутствуют
+        """
         if not tokens.paths or len(tokens.paths) < 2:
             message = "Отсутствует путь файла"
             logging.error(message)

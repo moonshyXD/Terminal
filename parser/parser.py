@@ -1,10 +1,18 @@
 import argparse
+from typing import Optional
 
 from src.errors import ParserError
 
 
 class Parser:
-    def __init__(self):
+    """
+    Класс для парсинга аргументов
+    """
+
+    def __init__(self) -> None:
+        """
+        Инициализация парсера
+        """
         self.parser = argparse.ArgumentParser(
             description="Парсер для данных, введенных в терминал",
         )
@@ -17,18 +25,24 @@ class Parser:
 
         self._parser_setup()
 
-    def parse(self, arguments: list):
+    def parse(self, arguments: list) -> Optional[argparse.Namespace]:
+        """
+        Парсит список аргументов командной строки
+        :param arguments: Список аргументов для парсинга
+        :return: Распаршенные аргументы
+        :raises ParserError: Если не удалось распарсить аргументы
+        """
         try:
-            if not arguments:
-                return None
-
             parsed_arguments = self.parser.parse_args(arguments)
 
             return parsed_arguments
         except SystemExit:
             raise ParserError("Не удалось распарсить выражение") from None
 
-    def _parser_setup(self):
+    def _parser_setup(self) -> None:
+        """
+        Настраивает все доступные команды парсера
+        """
         self._cat_setup()
         self._cd_setup()
         self._cp_setup()
@@ -43,7 +57,10 @@ class Parser:
         self._untar_setup()
         self._grep_setup()
 
-    def _ls_setup(self):
+    def _ls_setup(self) -> None:
+        """
+        Настраивает парсер для команды ls
+        """
         ls_parser = self.subparsers.add_parser(
             "ls",
             help="Отображение списка файлов в текущем рабочем каталоге",
@@ -53,19 +70,28 @@ class Parser:
         )
         ls_parser.add_argument("paths", nargs="*", help="Пути к директориям")
 
-    def _cd_setup(self):
+    def _cd_setup(self) -> None:
+        """
+        Настраивает парсер для команды cd
+        """
         cd_parser = self.subparsers.add_parser(
             "cd", help="Переход в указанный каталог"
         )
         cd_parser.add_argument("paths", nargs="*", help="Указанный каталог")
 
-    def _cat_setup(self):
+    def _cat_setup(self) -> None:
+        """
+        Настраивает парсер для команды cat
+        """
         cat_parser = self.subparsers.add_parser(
-            "cat", help="Вывод содержимиого указанного файла в консоль"
+            "cat", help="Вывод содержимого указанного файла в консоль"
         )
         cat_parser.add_argument("paths", nargs="*", help="Файлы для вывода")
 
-    def _cp_setup(self):
+    def _cp_setup(self) -> None:
+        """
+        Настраивает парсер для команды cp
+        """
         cp_parser = self.subparsers.add_parser(
             "cp",
             help="Копирование файла или каталога из источника в назначение",
@@ -80,15 +106,21 @@ class Parser:
             "paths", nargs="*", help="Исходный и целевой путь"
         )
 
-    def _mv_setup(self):
+    def _mv_setup(self) -> None:
+        """
+        Настраивает парсер для команды mv
+        """
         mv_parser = self.subparsers.add_parser(
-            "mv", help="Перемещение или переименовывание файла или каталога"
+            "mv", help="Перемещение или переименование файла или каталога"
         )
         mv_parser.add_argument(
             "paths", nargs="*", help="Исходный и целевой путь"
         )
 
-    def _rm_setup(self):
+    def _rm_setup(self) -> None:
+        """
+        Настраивает парсер для команды rm
+        """
         rm_parser = self.subparsers.add_parser(
             "rm", help="Удаление указанного файла"
         )
@@ -102,7 +134,10 @@ class Parser:
             "paths", nargs="*", help="Файлы или директории для удаления"
         )
 
-    def _history_setup(self):
+    def _history_setup(self) -> None:
+        """
+        Настраивает парсер для команды history
+        """
         history_parser = self.subparsers.add_parser(
             "history", help="Показать историю последних команд"
         )
@@ -114,46 +149,64 @@ class Parser:
             help="Количество последних команд",
         )
 
-    def _undo_setup(self):
+    def _undo_setup(self) -> None:
+        """
+        Настраивает парсер для команды undo
+        """
         self.subparsers.add_parser(
             "undo", help="Отменить последнюю команду из списка cp, mv, rm"
         )
 
-    def _zip_setup(self):
+    def _zip_setup(self) -> None:
+        """
+        Настраивает парсер для команды zip
+        """
         zip_parser = self.subparsers.add_parser(
-            "zip", help="Cоздание архива формата ZIP из каталога"
+            "zip", help="Создание архива формата ZIP из каталога"
         )
         zip_parser.add_argument(
             "paths", nargs="*", help="Директория для архивации"
         )
 
-    def _unzip_setup(self):
+    def _unzip_setup(self) -> None:
+        """
+        Настраивает парсер для команды unzip
+        """
         unzip_parser = self.subparsers.add_parser(
-            "unzip", help="Распаковка архива ZIP в текущий каталога"
+            "unzip", help="Распаковка архива ZIP в текущий каталог"
         )
         unzip_parser.add_argument(
             "paths", nargs="*", help="Директория для разархивации"
         )
 
-    def _tar_setup(self):
+    def _tar_setup(self) -> None:
+        """
+        Настраивает парсер для команды tar
+        """
         tar_parser = self.subparsers.add_parser(
-            "tar", help="Cоздание архива формата TAR из каталога"
+            "tar", help="Создание архива формата TAR из каталога"
         )
         tar_parser.add_argument(
             "paths", nargs="*", help="Директория для архивации"
         )
 
-    def _untar_setup(self):
+    def _untar_setup(self) -> None:
+        """
+        Настраивает парсер для команды untar
+        """
         untar_parser = self.subparsers.add_parser(
-            "untar", help="Распаковка архива TAR в текущий каталога"
+            "untar", help="Распаковка архива TAR в текущий каталог"
         )
         untar_parser.add_argument(
             "paths", nargs="*", help="Директория для разархивации"
         )
 
-    def _grep_setup(self):
+    def _grep_setup(self) -> None:
+        """
+        Настраивает парсер для команды grep
+        """
         grep_parser = self.subparsers.add_parser(
-            "grep", help="Поиса по указанном паттерну в файлах и полкаталогах"
+            "grep", help="Поиск по указанному паттерну в файлах и подкаталогах"
         )
         grep_parser.add_argument(
             "--recursive",
@@ -164,12 +217,6 @@ class Parser:
         grep_parser.add_argument(
             "--ignore-case",
             "-i",
-            action="store_true",
-            help="Поиск без учёта регистра",
-        )
-        grep_parser.add_argument(
-            "-ir",
-            "-ri",
             action="store_true",
             help="Поиск без учёта регистра",
         )

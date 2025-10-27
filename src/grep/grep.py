@@ -1,13 +1,23 @@
 import argparse
 import os
 import re
+from typing import Pattern
 
-from src.errors import InvalidFileError, ShellError
+from src.errors import InvalidFileError, NotAFileError, ShellError
 from src.file_commands.base_command import BaseClass
 
 
 class Grep(BaseClass):
-    def execute(self, tokens: argparse.Namespace):
+    """
+    Класс для поиска текста по регулярному выражению в файлах
+    """
+
+    def execute(self, tokens: argparse.Namespace) -> None:
+        """
+        Выполняет поиск по паттерну в файлах и директориях
+        :param tokens: Аргументы команды (паттерн, флаги, пути к файлам)
+        :raises ShellError: При ошибке выполнения поиска
+        """
         try:
             regex = re.compile("".join(tokens.pattern[0]))
             ignore_case = tokens.ignore_case
@@ -19,8 +29,15 @@ class Grep(BaseClass):
             raise ShellError(str(message)) from None
 
     def _grep_paths(
-        self, paths: list, regex, recursive: bool, ignore_case: bool
-    ):
+        self, paths: list, regex: Pattern, recursive: bool, ignore_case: bool
+    ) -> None:
+        """
+        Обрабатывает список путей для поиска
+        :param paths: Список путей к файлам или директориям
+        :param regex: Регулярное выражение
+        :param recursive: Флаг рекурсивного поиска
+        :param ignore_case: Флаг игнорирования регистра
+        """
         for path in paths:
             abs_path = self._abs_path(path)
             self._path_exists(abs_path)
@@ -35,17 +52,21 @@ class Grep(BaseClass):
                             [item_path], regex, recursive, ignore_case
                         )
                 else:
-                    for item in os.listdir(abs_path):
-                        item_path = os.path.join(abs_path, item)
-                        if os.path.isfile(item_path):
-                            self._find_coincidence(
-                                item_path, regex, ignore_case
-                            )
+                    raise NotAFileError(f"{abs_path} не является файлом")
 
-    def _find_coincidence(self, file_path: str, regex, ignore_case: bool):
+    def _find_coincidence(
+        self, file_path: str, regex: Pattern, ignore_case: bool
+    ) -> None:
+        """
+        Ищет совпадения регулярного выражения в файле
+        :param file_path: Путь к файлу для поиска
+        :param regex: Регулярное выражение
+        :param ignore_case: Флаг игнорирования регистра
+        :raises InvalidFileError: Если файл невозможно прочитать
+        """
         try:
             line_number = 1
-            with open(file_path, "r") as file:
+            with open(file_path, "r", encoding="utf-8") as file:
                 for line in file:
                     if ignore_case:
                         line = line.lower()

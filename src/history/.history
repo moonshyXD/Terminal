@@ -254,3 +254,44 @@
 253 grep 123 test
 254 mv test tests
 255 undo
+256 cp uv.lock huy
+257 mv huy tests
+258 undo
+259 grep "123 123" huy
+260 grep -r 123 tests
+261 grep 123 tests
+262 ls
+263 ls -l
+264 cp -r tests parser
+265 undo
+266 ls
+267 zip tests hui
+268 ls
+269 unzip hui.zip
+270 ls
+271 zip hui tests
+272 ls
+273 cp -r her tests
+274 undo
+275 cp -r her tests
+276 undo
+277 cp -r her tests
+278 undo
+279 cp -r her tests
+280 cp -r her tests
+281 undo
+282 cp -r her tests
+283 undo
+284 cp -r her tests
+285 undo
+286 cp -r her her2 her3 tests
+287 mv her her2 her3 tests
+288 undo
+289 rm -r her her2 her3
+290 undo
+291 ls
+292 ls -l
+293 ls src tests
+294 cat huy
+295 history
+296 history 300

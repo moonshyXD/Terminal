@@ -5,7 +5,6 @@ lint:
 	@echo "Запуск линтера"
 	ruff format .
 	ruff check --fix
-	isort .
 	mypy .
 
 .PHONY: run

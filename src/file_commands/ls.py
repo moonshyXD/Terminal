@@ -8,7 +8,16 @@ from src.file_commands.base_command import BaseClass
 
 
 class Ls(BaseClass):
+    """
+    Класс для отображения содержимого директорий
+    """
+
     def execute(self, tokens: argparse.Namespace) -> None:
+        """
+        Выводит список файлов и директорий
+        :param tokens: Аргументы команды (пути к директориям)
+        :raises ShellError: При ошибке чтения директории
+        """
         try:
             if tokens.paths:
                 paths = tokens.paths
@@ -36,6 +45,11 @@ class Ls(BaseClass):
             raise ShellError(str(message)) from None
 
     def _print_detailed(self, items: list, abs_path: str) -> None:
+        """
+        Выводит подробную информацию о файлах
+        :param items: Список элементов директории
+        :param abs_path: Абсолютный путь к директории
+        """
         for item in sorted(items):
             item_path = os.path.join(abs_path, item)
 
@@ -53,6 +67,10 @@ class Ls(BaseClass):
                 print(log)
 
     def _print_not_detailed(self, items: list) -> None:
+        """
+        Выводит список файлов
+        :param items: Список элементов директории
+        """
         for item in sorted(items):
             if item[0] != ".":
                 print(f"{item}", end=" ")
