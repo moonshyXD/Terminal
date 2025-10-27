@@ -2,8 +2,8 @@ import os
 import shlex
 import sys
 
-from logger import setup
-from parser.setup import Parser
+from logger.logger import Logger
+from parser.parser import Parser
 from src.archive import tar, untar, unzip, zip
 from src.errors import ShellError
 from src.file_commands import cat, cd, cp, ls, mv, rm
@@ -26,6 +26,7 @@ class Terminal:
         self.tar = tar.Tar()
         self.untar = untar.Untar()
         self.grep = grep.Grep()
+        self.logger = Logger()
         self.parser = Parser()
 
         self.COMMANDS = {
@@ -45,30 +46,34 @@ class Terminal:
         }
 
     def run(self):
-        setup.setup_logging()
-        initial_dir = os.getcwd()
+        self.logger.setup_logging()
         self.undo.clear_undo_history()
-        print(f"Начальная директория: {initial_dir}")
+
+        initial_directory = os.getcwd()
+        print(f"Initial directory: {initial_directory}")
 
         for line in sys.stdin:
+            self.logger.start_execution(line.strip())
             try:
                 tokens = self.parser.parse(shlex.split(line.strip()))
                 if tokens.command in self.COMMANDS:
                     self.COMMANDS[tokens.command](tokens)
                 else:
-                    print(f"Неизвестная команда: {tokens.command}")
+                    print(f"Unknown command: {tokens.command}")
 
                 self.history.add_history(line)
 
                 if tokens.command in ["cp"]:
                     self.undo.add_undo_history(line)
 
+                self.logger.success_execution(line.strip())
             except ShellError as message:
-                print(f"{message}")
+                print(message)
+                self.logger.failure_execution(message.strip())
                 continue
 
-        os.chdir(initial_dir)
-        print(f"\nВернулись в: {os.getcwd()}")
+        os.chdir(initial_directory)
+        print(f"\nBack to: {os.getcwd()}")
 
 
 if __name__ == "__main__":

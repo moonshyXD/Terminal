@@ -9,20 +9,17 @@ from src.file_commands.base_command import BaseClass
 
 class Ls(BaseClass):
     def execute(self, tokens: argparse.Namespace) -> None:
-        if tokens.paths:
-            paths = tokens.paths
-        else:
-            paths = [os.getcwd()]
-
-        detailed = tokens.l or tokens.long
-
         try:
-            log_args = ["-l"] + paths if detailed else paths
+            if tokens.paths:
+                paths = tokens.paths
+            else:
+                paths = [os.getcwd()]
+
+            detailed = tokens.long
 
             for path in paths:
                 abs_path = self._abs_path(path)
 
-                self._start_execution(log_args)
                 self._path_exists(abs_path)
                 self._is_directory(abs_path)
 
@@ -36,7 +33,6 @@ class Ls(BaseClass):
 
                 print()
         except Exception as message:
-            self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
 
     def _print_detailed(self, items: list, abs_path: str) -> None:

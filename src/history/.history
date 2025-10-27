@@ -205,3 +205,42 @@
 204 rm 'jdjasjkdjad adjasjdjasdjasd hjdjjadjad'
 205 cp uv.lock "ddadadasd djadajdjasd dasjdjasjda"
 206 rm "ddadadasd djadajdjasd dasjdjasjda"
+207 ls
+208 grep 123 uv.lock
+209 grep 123 tets
+210 grep 123 tets
+211 grep 123 tets
+212 grep 123 tets
+213 grep 123 tets
+214 grep -r tests
+215 grep -r tests
+216 grep -r tests
+217 grep -r tests
+218 grep -r 123 tests
+219 grep -r 123 test tests
+220 grep -i test
+221 grep -i 123 test
+222 grep -interactive 123 test
+223 ls -long
+224 ls -l
+225 ls -l
+226 cp uv.lock huy
+227 mv huy tests
+228 undo
+229 mv huy huy2
+230 mv tests huy3
+231 ls -l
+232 ls -l
+233 ls
+234 ls
+235 ls -l
+236 ls
+237 ls -l
+238 ls -l
+239 ls src
+240 ls241 ls241 ls
+241 ls
+242 ls
+243 ls
+244 ls
+245 ls

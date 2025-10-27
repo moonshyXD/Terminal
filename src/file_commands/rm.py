@@ -15,15 +15,13 @@ class Rm(BaseClass):
         )
 
     def execute(self, tokens: argparse.Namespace):
-        if not tokens.paths:
-            paths = [os.path.expanduser("~")]
-        else:
-            paths = tokens.paths
-
-        directory = tokens.r or tokens.recursive
-
         try:
-            self._start_execution(paths)
+            if not tokens.paths:
+                paths = [os.path.expanduser("~")]
+            else:
+                paths = tokens.paths
+
+            directory = tokens.recursive
 
             for path in paths:
                 abs_path = self._abs_path(path)
@@ -54,7 +52,6 @@ class Rm(BaseClass):
                     self._save_undo_info(filename, os.getcwd())
 
         except Exception as message:
-            self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
 
     def _save_undo_info(self, filename: str, original_dir: str):

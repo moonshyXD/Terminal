@@ -2,6 +2,7 @@ import argparse
 import os
 from collections import deque
 
+from src.errors import ShellError
 from src.file_commands.base_command import BaseClass
 
 
@@ -11,11 +12,13 @@ class History(BaseClass):
         self.history_path = os.path.join(os.getcwd(), "src/history/.history")
 
     def execute(self, tokens: argparse.Namespace):
-        self._start_execution(tokens.paths)
-        count_commands = tokens.count
-        history = self._get_history(count_commands)
-        for line in history:
-            print(line, end="")
+        try:
+            count_commands = tokens.count
+            history = self._get_history(count_commands)
+            for line in history:
+                print(line, end="")
+        except Exception as message:
+            raise ShellError(str(message)) from None
 
     def _get_history(self, count_commands: int):
         with open(self.history_path, "r", encoding="utf-8") as file:

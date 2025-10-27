@@ -1,3 +1,4 @@
+import argparse
 import logging
 import os
 from abc import ABC, abstractmethod
@@ -45,9 +46,8 @@ class BaseClass(ABC):
         if not os.path.isdir(path):
             raise NotADirectoryError(f"Not a directory: {path}") from None
 
-    def _start_execution(self, paths: list) -> None:
-        command_str = f"{self.command} {' '.join(paths)}"
-        logging.info(command_str)
-
-    def _failure_execution(self, paths: list, message: str) -> None:
-        logging.error(f"{message}")
+    def _is_tokens(self, tokens: argparse.Namespace):
+        if not tokens.paths:
+            message = "Missing file operand"
+            logging.error(message)
+            raise PathNotFoundError(message) from None

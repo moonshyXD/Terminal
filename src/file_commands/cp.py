@@ -4,25 +4,21 @@ import os
 import re
 import shutil
 
-from src.errors import ShellError
+from src.errors import PathNotFoundError, ShellError
 from src.file_commands.base_command import BaseClass
 
 
 class Cp(BaseClass):
     def execute(self, tokens: argparse.Namespace):
-        if not tokens.paths or len(tokens.paths) < 2:
-            message = "Missing file operand"
-            logging.error(message)
-            raise ShellError(message) from None
-
-        paths = tokens.paths
-        directory = tokens.r or tokens.recursive
-
         try:
+            self._is_tokens(tokens)
+
+            paths = tokens.paths
+            directory = tokens.recursive
+
             abs_from_path = self._abs_path(paths[0])
             abs_to_path = self._abs_path(paths[1])
 
-            self._start_execution(paths)
             self._path_exists(abs_from_path)
 
             if directory:
@@ -49,9 +45,10 @@ class Cp(BaseClass):
                 shutil.copy(abs_from_path, abs_to_path)
 
         except Exception as message:
-            self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
 
-    def _start_execution(self, path: list) -> None:
-        command_str = f"{self.command} {path[0]} {path[1]}"
-        logging.info(command_str)
+    def _is_tokens(self, tokens: argparse.Namespace):
+        if not tokens.paths or len(tokens.paths) < 2:
+            message = "Missing file operand"
+            logging.error(message)
+            raise PathNotFoundError(message) from None

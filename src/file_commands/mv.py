@@ -16,21 +16,14 @@ class Mv(BaseClass):
         )
 
     def execute(self, tokens: argparse.Namespace):
-        if not tokens.paths or len(tokens.paths) < 2:
-            message = "Missing file operand"
-            logging.error(message)
-            raise PathNotFoundError(message)
-
-        paths = tokens.paths
-
         try:
+            self._is_tokens(tokens)
+
+            paths = tokens.paths
+
             abs_to_path = self._abs_path(paths[len(paths) - 1])
-            self._start_execution(paths)
 
             for path in paths:
-                if path == abs_to_path:
-                    continue
-
                 abs_from_path = self._abs_path(path)
 
                 self._path_exists(abs_from_path)
@@ -50,7 +43,6 @@ class Mv(BaseClass):
 
             self._optimize_paths_for_undo(tokens)
         except Exception as message:
-            self._failure_execution(paths, str(message))
             raise ShellError(str(message)) from None
 
     def _optimize_paths_for_undo(self, tokens: argparse.Namespace):
@@ -70,3 +62,9 @@ class Mv(BaseClass):
                     self.undo_history_path, "a", encoding="utf-8"
                 ) as file:
                     file.write(undo_line)
+
+    def _is_tokens(self, tokens: argparse.Namespace):
+        if not tokens.paths or len(tokens.paths) < 2:
+            message = "Missing file operand"
+            logging.error(message)
+            raise PathNotFoundError(message) from None

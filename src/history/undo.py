@@ -3,8 +3,8 @@ import os
 import shutil
 from collections import deque
 
-from parser.setup import Parser
-from src.errors import PathNotFoundError, UndoError
+from parser.parser import Parser
+from src.errors import PathNotFoundError, ShellError, UndoError
 from src.file_commands.base_command import BaseClass
 
 
@@ -23,21 +23,23 @@ class Undo(BaseClass):
         }
 
     def execute(self, tokens: argparse.Namespace):
-        self._start_execution([])
-        last_commands = self._get_last_command_group()
+        try:
+            last_commands = self._get_last_command_group()
 
-        if not last_commands:
-            last_cmd = self._get_last_command()
-            if not last_cmd:
-                raise UndoError("Commands to undo not found")
-            last_commands = [last_cmd]
+            if not last_commands:
+                last_cmd = self._get_last_command()
+                if not last_cmd:
+                    raise UndoError("Commands to undo not found")
+                last_commands = [last_cmd]
 
-        for cmd in last_commands:
-            parsed_tokens = self.parser.parse(cmd.strip().split())
-            if parsed_tokens.command in self.COMMANDS:
-                self.COMMANDS[parsed_tokens.command](parsed_tokens)
+            for cmd in last_commands:
+                parsed_tokens = self.parser.parse(cmd.strip().split())
+                if parsed_tokens.command in self.COMMANDS:
+                    self.COMMANDS[parsed_tokens.command](parsed_tokens)
 
-        self._remove_last_lines(len(last_commands))
+            self._remove_last_lines(len(last_commands))
+        except Exception as message:
+            raise ShellError(str(message)) from None
 
     def _get_last_command_group(self):
         try:
