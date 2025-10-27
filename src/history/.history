@@ -295,3 +295,17 @@
 294 cat huy
 295 history
 296 history 300
+297 ls
+298 rm -r her
+299 cp huy her
+300 ls
+301 rm her
+302 ls
+303 cp huy her
+304 ls
+305 cp her huy
+306 rm huy
+307 cp her huy
+308 rm huy
+309 cp her huy
+310 rm huy

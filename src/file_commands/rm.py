@@ -10,12 +10,11 @@ class Rm(BaseClass):
     """
     Класс для удаления файлов и директорий
     """
-
     def __init__(self) -> None:
         """
-        Инициализация команды удаления с путями к корзине и истории отмены
+        Инициализация команды удаления с путями к корзине и историей отмены
         """
-        self.trash_path = os.path.join(os.getcwd(), "src/history/.trash")
+        self._trash_path = os.path.join(os.getcwd(), "src/history/.trash")
         self.undo_history_path = os.path.join(
             os.getcwd(), "src/history/.undo_history"
         )
@@ -45,8 +44,12 @@ class Rm(BaseClass):
                     accept = input()
                     if accept == "y":
                         filename = os.path.basename(abs_path)
+
+                        if os.path.exists(self._trash_path):
+                            shutil.rmtree(self._trash_path)
+
                         shutil.move(
-                            abs_path, os.path.join(self.trash_path, filename)
+                            abs_path, os.path.join(self._trash_path, filename)
                         )
 
                         self._save_undo_info(filename, os.getcwd())
@@ -57,7 +60,7 @@ class Rm(BaseClass):
                     self._is_file(abs_path)
                     filename = os.path.basename(abs_path)
                     shutil.move(
-                        abs_path, os.path.join(self.trash_path, filename)
+                        abs_path, os.path.join(self._trash_path, filename)
                     )
 
                     self._save_undo_info(filename, os.getcwd())

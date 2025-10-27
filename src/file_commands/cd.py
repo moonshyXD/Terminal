@@ -9,7 +9,6 @@ class Cd(BaseClass):
     """
     Класс для изменения текущей директории
     """
-
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Изменяет текущую рабочую директорию

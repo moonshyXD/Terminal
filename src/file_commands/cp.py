@@ -12,10 +12,9 @@ class Cp(BaseClass):
     """
     Класс для копирования файлов и директорий
     """
-
     def __init__(self) -> None:
         """
-        Инициализация команды копирования с путём к истории отмены
+        Инициализация команды копирования с путём истории отмены
         """
         self._command = self.__class__.__name__.lower()
         self.undo_history_path = os.path.join(

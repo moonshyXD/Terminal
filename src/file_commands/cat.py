@@ -9,7 +9,6 @@ class Cat(BaseClass):
     """
     Класс для вывода содержимого файлов
     """
-
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Выводит содержимое файлов в консоль

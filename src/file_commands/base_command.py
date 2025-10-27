@@ -15,7 +15,6 @@ class BaseClass(ABC):
     """
     Базовый класс для всех команд
     """
-
     @abstractmethod
     def execute(self, tokens: argparse.Namespace) -> None:
         """

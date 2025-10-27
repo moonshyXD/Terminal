@@ -10,10 +10,9 @@ class History(BaseClass):
     """
     Класс для управления историей выполненных команд
     """
-
     def __init__(self) -> None:
         """
-        Инициализация истории команд с путём к файлу
+        Инициализация истории команд с путём к файлу истории
         """
         self.history_path = os.path.join(os.getcwd(), "src/history/.history")
 

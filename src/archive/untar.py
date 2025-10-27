@@ -10,7 +10,6 @@ class Untar(BaseClass):
     """
     Класс для распаковки tar.gz архивов
     """
-
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Распаковывает tar.gz архив в текущую директорию

@@ -18,10 +18,9 @@ class Undo(BaseClass):
     """
     Класс для отмены последних выполненных операций
     """
-
     def __init__(self) -> None:
         """
-        Инициализация системы отмены
+        Инициализация системы отмены с путями истории
         """
         self.undo_history_path = os.path.join(
             os.getcwd(), "src/history/.undo_history"
