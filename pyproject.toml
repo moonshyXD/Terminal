@@ -4,12 +4,10 @@ version = "0.1.0"
 description = "Mini File Manager"
 requires-python = ">=3.12"
 dependencies = [
-    "isort>=7.0.0",
     "logging>=0.4.9.6",
     "mypy>=1.18.2",
     "pre-commit>=4.3.0",
     "ruff>=0.14.1",
-    "typer>=0.20.0",
 ]
 
 [dependency-groups]
