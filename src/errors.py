@@ -68,3 +68,9 @@ class InvalidFileError(ShellError):
     """Недопустимый файл"""
 
     pass
+
+
+class AlreadyExistsError(ShellError):
+    """Этот файл или директория уже созданы"""
+
+    pass
