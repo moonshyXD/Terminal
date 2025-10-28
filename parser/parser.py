@@ -8,6 +8,7 @@ class Parser:
     """
     Класс для парсинга аргументов
     """
+
     def __init__(self) -> None:
         """
         Инициализация парсера
@@ -59,6 +60,8 @@ class Parser:
         self._untar_setup()
         self._grep_setup()
         self._stop_setup()
+        self._touch_setup()
+        self._mkdir_setup()
 
     def _ls_setup(self) -> None:
         """
@@ -228,10 +231,29 @@ class Parser:
             "paths", nargs="*", help="Файлы или каталоги для поиска"
         )
 
+    def _mkdir_setup(self) -> None:
+        """
+        Настраивает парсер для команды mkdir
+        """
+        mkdir_parser = self.subparsers.add_parser(
+            "mkdir", help="Создание пустой директории"
+        )
+        mkdir_parser.add_argument(
+            "paths", nargs="*", help="Директория для создания"
+        )
+
+    def _touch_setup(self) -> None:
+        """
+        Настраивает парсер для команды touch
+        """
+        touch_parser = self.subparsers.add_parser(
+            "touch",
+            help="Создание пустого файла/обновление времени модификации",
+        )
+        touch_parser.add_argument("paths", nargs="*", help="Файл для создания")
+
     def _stop_setup(self) -> None:
         """
         Настраивает парсер для команды stop
         """
-        self.subparsers.add_parser(
-            "stop", help="Завершение работы программы"
-        )
+        self.subparsers.add_parser("stop", help="Завершение работы программы")

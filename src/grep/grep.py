@@ -11,6 +11,7 @@ class Grep(BaseClass):
     """
     Класс для поиска текста по регулярному выражению в файлах
     """
+
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Выполняет поиск по паттерну в файлах и директориях

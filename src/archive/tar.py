@@ -15,6 +15,7 @@ class Tar(BaseClass):
     """
     Класс для создания tar.gz архивов
     """
+
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Создаёт tar.gz архив из директории

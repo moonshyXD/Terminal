@@ -11,6 +11,7 @@ class Zip(BaseClass):
     """
     Класс для создания zip архивов
     """
+
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Создаёт zip архив из директории

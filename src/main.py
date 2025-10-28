@@ -7,7 +7,7 @@ from logger.logger import Logger
 from parser.parser import Parser
 from src.archive import tar, untar, unzip, zip
 from src.errors import ShellError
-from src.file_commands import cat, cd, cp, ls, mv, rm
+from src.file_commands import cat, cd, cp, ls, mkdir, mv, rm, touch
 from src.grep import grep
 from src.history import history, undo
 
@@ -16,6 +16,7 @@ class Terminal:
     """
     Основной класс терминала для управления командами
     """
+
     def __init__(self) -> None:
         """
         Инициализация терминала с загрузкой всех команд
@@ -33,6 +34,8 @@ class Terminal:
         self.tar = tar.Tar()
         self.untar = untar.Untar()
         self.grep = grep.Grep()
+        self.mkdir = mkdir.Mkdir()
+        self.touch = touch.Touch()
         self.logger = Logger()
         self.parser = Parser()
 
@@ -52,6 +55,8 @@ class Terminal:
                 "tar",
                 "untar",
                 "grep",
+                "touch",
+                "mkdir",
             ]
         }
 

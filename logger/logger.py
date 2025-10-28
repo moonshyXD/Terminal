@@ -5,6 +5,7 @@ class Logger:
     """
     Класс для логирования
     """
+
     def setup_logging(self) -> None:
         """
         Настраивает логирование

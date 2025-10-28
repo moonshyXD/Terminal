@@ -11,6 +11,7 @@ class Ls(BaseClass):
     """
     Класс для отображения содержимого директорий
     """
+
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Выводит список файлов и директорий
