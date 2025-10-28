@@ -21,43 +21,26 @@ class Terminal:
         """
         Инициализация терминала с загрузкой всех команд
         """
-        self.cat = cat.Cat()
-        self.cd = cd.Cd()
-        self.cp = cp.Cp()
-        self.ls = ls.Ls()
-        self.rm = rm.Rm()
-        self.mv = mv.Mv()
-        self.history = history.History()
         self.undo = undo.Undo()
-        self.zip = zip.Zip()
-        self.unzip = unzip.Unzip()
-        self.tar = tar.Tar()
-        self.untar = untar.Untar()
-        self.grep = grep.Grep()
-        self.mkdir = mkdir.Mkdir()
-        self.touch = touch.Touch()
-        self.logger = Logger()
+        self.history = history.History()
         self.parser = Parser()
 
         self.COMMANDS = {
-            name: getattr(self, name).execute
-            for name in [
-                "cat",
-                "cd",
-                "cp",
-                "ls",
-                "rm",
-                "mv",
-                "history",
-                "undo",
-                "zip",
-                "unzip",
-                "tar",
-                "untar",
-                "grep",
-                "touch",
-                "mkdir",
-            ]
+            "cat": cat.Cat().execute,
+            "cd": cd.Cd().execute,
+            "cp": cp.Cp().execute,
+            "ls": ls.Ls().execute,
+            "rm": rm.Rm().execute,
+            "mv": mv.Mv().execute,
+            "history": history.History().execute,
+            "undo": undo.Undo().execute,
+            "zip": zip.Zip().execute,
+            "unzip": unzip.Unzip().execute,
+            "tar": tar.Tar().execute,
+            "untar": untar.Untar().execute,
+            "grep": grep.Grep().execute,
+            "mkdir": mkdir.Mkdir().execute,
+            "touch": touch.Touch().execute,
         }
 
     def run(self) -> None:
@@ -66,7 +49,7 @@ class Terminal:
         Читает команды из stdin и выполняет их
         :raises ShellError: При ошибке выполнения команды
         """
-        self.logger.setup_logging()
+        Logger.setup_logging()
         self.undo.clear_undo_history()
 
         print("Приветствуем вас в мини-оболочке с файловыми командами.")
@@ -79,7 +62,7 @@ class Terminal:
                 print(f"> {os.getcwd()} ", end="", flush=True)
                 continue
 
-            self.logger.start_execution(line.strip())
+            Logger.start_execution(line.strip())
             try:
                 tokens = self.parser.parse(shlex.split(line.strip()))
                 if tokens is None:
@@ -96,10 +79,10 @@ class Terminal:
 
                 self.history.add_history(line)
 
-                self.logger.success_execution(line.strip())
+                Logger.success_execution(line.strip())
             except ShellError as message:
                 print(message)
-                self.logger.failure_execution(str(message))
+                Logger.failure_execution(str(message))
 
             print(f"> {os.getcwd()} ", end="", flush=True)
 

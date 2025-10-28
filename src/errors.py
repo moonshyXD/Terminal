@@ -74,3 +74,9 @@ class AlreadyExistsError(ShellError):
     """Этот файл или директория уже созданы"""
 
     pass
+
+
+class RegualarVerbError(ShellError):
+    """Регулярное выражение не является корректным"""
+
+    pass

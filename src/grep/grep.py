@@ -1,9 +1,13 @@
 import argparse
 import os
 import re
-from typing import Pattern
 
-from src.errors import InvalidFileError, NotAFileError, ShellError
+from src.errors import (
+    InvalidFileError,
+    NotAFileError,
+    RegualarVerbError,
+    ShellError,
+)
 from src.file_commands.base_command import BaseClass
 
 
@@ -19,17 +23,21 @@ class Grep(BaseClass):
         :raises ShellError: При ошибке выполнения поиска
         """
         try:
-            regex = re.compile("".join(tokens.pattern[0]))
+            regex = self._is_correct_regular(tokens)
             ignore_case = tokens.ignore_case
             recursive = tokens.recursive
             paths = tokens.paths if tokens.paths else [os.getcwd()]
 
             self._grep_paths(paths, regex, recursive, ignore_case)
         except Exception as message:
-            raise ShellError(str(message)) from None
+            raise ShellError(message) from None
 
     def _grep_paths(
-        self, paths: list, regex: Pattern, recursive: bool, ignore_case: bool
+        self,
+        paths: list,
+        regex: re.Pattern,
+        recursive: bool,
+        ignore_case: bool,
     ) -> None:
         """
         Обрабатывает список путей для поиска
@@ -55,7 +63,7 @@ class Grep(BaseClass):
                     raise NotAFileError(f"{abs_path} не является файлом")
 
     def _find_coincidence(
-        self, file_path: str, regex: Pattern, ignore_case: bool
+        self, file_path: str, regex: re.Pattern, ignore_case: bool
     ) -> None:
         """
         Ищет совпадения регулярного выражения в файле
@@ -78,4 +86,19 @@ class Grep(BaseClass):
         except UnicodeDecodeError:
             raise InvalidFileError(
                 f"Файл {file_path} невозможно прочитать"
+            ) from None
+
+    def _is_correct_regular(self, tokens: argparse.Namespace):
+        """
+        Компилирует регулярное выражение с учётом флагов
+        :param tokens: Аргументы команды (паттерн)
+        :return: Скомпилированное регулярное выражение
+        :raises RegualarVerbError: Неверное регулярное выражение
+        """
+        try:
+            regex = re.compile("".join(tokens.pattern[0]))
+            return regex
+        except re.error:
+            raise RegualarVerbError(
+                "Неккоректное регулярное выражение"
             ) from None

@@ -335,3 +335,18 @@
 334 ls -l
 335 ls
 336 ls -l
+337 grep 123 mypy.ini
+338 grep 123 README.md
+339 grep 123 mypy.ini
+340 grep 123 mypy.ini
+341 grep 123 mypy.ini
+342 grep p* mypy.ini
+343 grep p* test
+344 grep p* test
+345 grep p+ test
+346 ls
+347 ls -l
+348 mkdir huy
+349 rm -r huy
+350 touch huy
+351 rm huy

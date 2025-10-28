@@ -8,7 +8,7 @@ from src.file_commands.base_command import BaseClass
 class Touch(BaseClass):
     def execute(self, tokens):
         try:
-            self._is_tokens(tokens.paths)
+            self._is_tokens(tokens)
             for path in tokens.paths:
                 abs_path = self._abs_path(path)
 

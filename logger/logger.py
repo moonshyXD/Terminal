@@ -6,7 +6,8 @@ class Logger:
     Класс для логирования
     """
 
-    def setup_logging(self) -> None:
+    @classmethod
+    def setup_logging(cls) -> None:
         """
         Настраивает логирование
         """
@@ -17,21 +18,24 @@ class Logger:
             datefmt="%Y-%m-%d %H:%M:%S",
         )
 
-    def start_execution(self, command: str) -> None:
+    @classmethod
+    def start_execution(cls, command: str) -> None:
         """
         Логирует начало выполнения команды
         :param command: Команда для логирования
         """
         logging.info(f"STARTED: {command}")
 
-    def success_execution(self, command: str) -> None:
+    @classmethod
+    def success_execution(cls, command: str) -> None:
         """
         Логирует успешное выполнение команды
         :param command: Команда для логирования
         """
         logging.info(f"SUCCESS: {command}")
 
-    def failure_execution(self, message: str) -> None:
+    @classmethod
+    def failure_execution(cls, message: str) -> None:
         """
         Логирует ошибку выполнения команды
         :param message: Сообщение об ошибке

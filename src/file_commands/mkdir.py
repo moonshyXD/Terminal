@@ -1,3 +1,4 @@
+import argparse
 import os
 
 from src.errors import AlreadyExistsError, ShellError
@@ -5,9 +6,9 @@ from src.file_commands.base_command import BaseClass
 
 
 class Mkdir(BaseClass):
-    def execute(self, tokens):
+    def execute(self, tokens: argparse.Namespace):
         try:
-            self._is_tokens(tokens.paths)
+            self._is_tokens(tokens)
             for path in tokens.paths:
                 abs_path = self._abs_path(path)
 
