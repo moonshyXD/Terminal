@@ -309,3 +309,29 @@
 308 rm huy
 309 cp her huy
 310 rm huy
+311 ls
+312 ls
+313 ls
+314 ls -l
+315 ls
+316 ls -l
+317 ls
+318 ls -l
+319 ls
+320 ls -l
+321 ls -l
+322 ls
+323 ls
+324 ls -l
+325 cp uv.lock huy
+326 undo
+327 ls
+328 ls -l
+329 cd src
+330 ls
+331 ls -l
+332 ls
+333 ls
+334 ls -l
+335 ls
+336 ls -l

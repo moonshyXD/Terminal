@@ -35,7 +35,10 @@ class Parser:
             parsed_arguments = self.parser.parse_args(arguments)
 
             return parsed_arguments
-        except SystemExit:
+        except SystemExit as message:
+            if message.code == 0:
+                return None
+
             raise ParserError("Не удалось распарсить выражение") from None
 
     def _parser_setup(self) -> None:
@@ -55,6 +58,7 @@ class Parser:
         self._tar_setup()
         self._untar_setup()
         self._grep_setup()
+        self._stop_setup()
 
     def _ls_setup(self) -> None:
         """
@@ -222,4 +226,12 @@ class Parser:
         grep_parser.add_argument("pattern", nargs=1, help="Шаблон для поиска")
         grep_parser.add_argument(
             "paths", nargs="*", help="Файлы или каталоги для поиска"
+        )
+
+    def _stop_setup(self) -> None:
+        """
+        Настраивает парсер для команды stop
+        """
+        self.subparsers.add_parser(
+            "stop", help="Завершение работы программы"
         )

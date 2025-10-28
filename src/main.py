@@ -64,19 +64,25 @@ class Terminal:
         self.logger.setup_logging()
         self.undo.clear_undo_history()
 
-        initial_directory = os.getcwd()
-        print(f"Изначальная директория: {initial_directory}")
+        print("Приветствуем вас в мини-оболочке с файловыми командами.")
+        print("Для помощи в работе с командами пропишите в консоли --help")
+
+        print(f"> {os.getcwd()} ", end="", flush=True)
 
         for line in sys.stdin:
             if not line.strip():
+                print(f"> {os.getcwd()} ", end="", flush=True)
                 continue
 
             self.logger.start_execution(line.strip())
             try:
                 tokens = self.parser.parse(shlex.split(line.strip()))
-
                 if tokens is None:
+                    print(f"> {os.getcwd()} ", end="", flush=True)
                     continue
+
+                if tokens.command == "stop":
+                    break
 
                 if tokens.command in self.COMMANDS:
                     self.COMMANDS[tokens.command](tokens)
@@ -89,10 +95,8 @@ class Terminal:
             except ShellError as message:
                 print(message)
                 self.logger.failure_execution(str(message))
-                continue
 
-        os.chdir(initial_directory)
-        print(f"\nВернулись в: {os.getcwd()}")
+            print(f"> {os.getcwd()} ", end="", flush=True)
 
 
 if __name__ == "__main__":
