@@ -28,6 +28,5 @@ class Cd(BaseClass):
             self._is_directory(abs_path)
 
             os.chdir(abs_path)
-            print(f"Текущая директория: {os.getcwd()}")
         except Exception as message:
             raise ShellError(str(message)) from None

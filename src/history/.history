@@ -350,3 +350,21 @@
 349 rm -r huy
 350 touch huy
 351 rm huy
+352 history 0
+353 history 1
+354 history
+355 cd ..
+356 cd ..
+357 cd Laba_Python
+358 ls
+359 cd FileManager
+360 ls
+361 ls -l
+362 cd
+363 zip tests hyuy
+364 zip tests
+365 zip tests
+366 zip /mnt/c/Projects/Laba_Python/FileManager/tests
+367 zip /mnt/c/Projects/Laba_Python/FileManager/tests
+368 tar /mnt/c/Projects/Laba_Python/FileManager/tests
+369 tar tests /mnt/c/Projects/Laba_Python/FileManager/huy.zip
