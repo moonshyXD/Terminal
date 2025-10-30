@@ -11,7 +11,7 @@ from src.errors import (
     ShellError,
     UndoError,
 )
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
 
 
 class Undo(BaseClass):

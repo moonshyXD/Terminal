@@ -8,7 +8,7 @@ from src.errors import (
     RegualarVerbError,
     ShellError,
 )
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
 
 
 class Grep(BaseClass):

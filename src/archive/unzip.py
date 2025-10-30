@@ -4,7 +4,7 @@ import re
 import zipfile
 
 from src.errors import ShellError
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
 
 
 class Unzip(BaseClass):

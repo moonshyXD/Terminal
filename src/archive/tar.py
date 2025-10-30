@@ -3,7 +3,7 @@ import os
 import tarfile
 
 from src.errors import ShellError
-from src.file_commands.base_command import (
+from src.filesystem.base_command import (
     BaseClass,
 )
 

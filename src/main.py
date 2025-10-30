@@ -7,7 +7,7 @@ from logger.logger import Logger
 from parser.parser import Parser
 from src.archive import tar, untar, unzip, zip
 from src.errors import ShellError
-from src.file_commands import cat, cd, cp, ls, mkdir, mv, rm, touch
+from src.filesystem import cat, cd, cp, ls, mkdir, mv, rm, touch
 from src.grep import grep
 from src.history import history, undo
 

@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 
 from src.errors import ShellError
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
 
 
 class Cat(BaseClass):

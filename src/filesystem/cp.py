@@ -5,7 +5,7 @@ import re
 import shutil
 
 from src.errors import PathNotFoundError, ShellError
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
 
 
 class Cp(BaseClass):

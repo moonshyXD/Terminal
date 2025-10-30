@@ -3,7 +3,7 @@ import os
 import shutil
 
 from src.errors import DeletingError, ShellError
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
 
 
 class Rm(BaseClass):
@@ -15,8 +15,9 @@ class Rm(BaseClass):
         """
         Инициализация команды удаления с путями к корзине и историей отмены
         """
+        self._history_path = os.path.join(os.getcwd(), "src/history/.history")
         self._trash_path = os.path.join(os.getcwd(), "src/history/.trash")
-        self.undo_history_path = os.path.join(
+        self._undo_history_path = os.path.join(
             os.getcwd(), "src/history/.undo_history"
         )
 
@@ -37,6 +38,13 @@ class Rm(BaseClass):
             for path in paths:
                 abs_path = self._abs_path(path)
                 self._path_exists(abs_path)
+                self._is_system_paths(abs_path)
+                print(
+                    abs_path,
+                    self._trash_path,
+                    self._undo_history_path,
+                    self._history_path,
+                )
 
                 if directory:
                     self._is_directory(abs_path)
@@ -77,7 +85,7 @@ class Rm(BaseClass):
         """
         undo_line = f"rm {filename} {original_dir}\n"
 
-        with open(self.undo_history_path, "a", encoding="utf-8") as file:
+        with open(self._undo_history_path, "a", encoding="utf-8") as file:
             file.write(undo_line)
 
     def _is_root(self, path: str) -> None:
@@ -115,3 +123,13 @@ class Rm(BaseClass):
 
         if target.startswith(parent_dir):
             raise DeletingError("Невозможно удалить родительскую директорию")
+
+    def _is_system_paths(self, path: str):
+        system_paths = [
+            self._undo_history_path,
+            self._history_path,
+            self._trash_path,
+        ]
+
+        if path in system_paths:
+            raise DeletingError("Нельзя удалить эти системные файлы")
