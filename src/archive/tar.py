@@ -37,7 +37,7 @@ class Tar(BaseClass):
             if not archive_path.endswith((".tar.gz", ".tgz")):
                 archive_path += ".tar.gz"
 
-            archive_name = os.path.basename(folder_tar.rstrip('/'))
+            archive_name = os.path.basename(folder_tar.rstrip("/"))
 
             self._tar(folder_tar, archive_path, archive_name)
         except Exception as message:

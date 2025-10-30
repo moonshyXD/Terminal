@@ -368,3 +368,18 @@
 367 zip /mnt/c/Projects/Laba_Python/FileManager/tests
 368 tar /mnt/c/Projects/Laba_Python/FileManager/tests
 369 tar tests /mnt/c/Projects/Laba_Python/FileManager/huy.zip
+370 grep -i PIDOR mypy.ini
+371 grep PIDOR test.txt
+372 grep -i PIDOR test.txt
+373 grep PIDOR test.txt
+374 grep -i PIDOR test.txt
+375 grep -i PIDOR test.txt
+376 grep -i PIDOR test.txt
+377 grep -i PIDOR test.txt
+378 grep -i PIDOR test.txt
+379 grep -i PIDOR test.txt
+380 grep -i PIDOR test.txt
+381 grep PIDOR test.txt
+382 grep pidor test.txt
+383 grep -i pidor test.txt
+384 grep -i python Makefile

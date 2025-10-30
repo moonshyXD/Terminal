@@ -11,6 +11,7 @@ class Unzip(BaseClass):
     """
     Класс для распаковки zip архивов
     """
+
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Распаковывает zip архив в отдельную директорию

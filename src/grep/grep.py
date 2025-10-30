@@ -23,9 +23,9 @@ class Grep(BaseClass):
         :raises ShellError: При ошибке выполнения поиска
         """
         try:
-            regex = self._is_correct_regular(tokens)
             ignore_case = tokens.ignore_case
             recursive = tokens.recursive
+            regex = self._is_correct_regular(tokens, ignore_case)
             paths = tokens.paths if tokens.paths else [os.getcwd()]
 
             self._grep_paths(paths, regex, recursive, ignore_case)
@@ -76,10 +76,9 @@ class Grep(BaseClass):
             line_number = 1
             with open(file_path, "r", encoding="utf-8") as file:
                 for line in file:
-                    if ignore_case:
-                        line = line.lower()
+                    search_line = line.lower() if ignore_case else line
 
-                    if regex.search(line):
+                    if regex.search(search_line):
                         print(f"{file_path}:{line_number}:{line.rstrip()}")
 
                     line_number += 1
@@ -88,7 +87,9 @@ class Grep(BaseClass):
                 f"Файл {file_path} невозможно прочитать"
             ) from None
 
-    def _is_correct_regular(self, tokens: argparse.Namespace):
+    def _is_correct_regular(
+        self, tokens: argparse.Namespace, ignore_case: bool
+    ):
         """
         Компилирует регулярное выражение с учётом флагов
         :param tokens: Аргументы команды (паттерн)
@@ -96,8 +97,13 @@ class Grep(BaseClass):
         :raises RegualarVerbError: Неверное регулярное выражение
         """
         try:
-            regex = re.compile("".join(tokens.pattern[0]))
-            return regex
+            regex = "".join(tokens.pattern[0])
+            compiled_regex = (
+                re.compile(regex, re.IGNORECASE)
+                if ignore_case
+                else re.compile(regex)
+            )
+            return compiled_regex
         except re.error:
             raise RegualarVerbError(
                 "Неккоректное регулярное выражение"
