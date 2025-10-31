@@ -235,6 +235,12 @@ class Parser:
             action="store_true",
             help="Поиск без учёта регистра",
         )
+        grep_parser.add_argument(
+            "-ri",
+            "-ir",
+            action="store_true",
+            help="Поиск без учёта регистра в подкаталогах",
+        )
         grep_parser.add_argument("pattern", nargs=1, help="Шаблон для поиска")
         grep_parser.add_argument(
             "paths", nargs="*", help="Файлы или каталоги для поиска"
