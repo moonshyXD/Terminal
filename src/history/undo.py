@@ -8,7 +8,6 @@ from src.filesystem.base_command import BaseClass
 from src.utils.errors import (
     CommandNotFoundError,
     PathNotFoundError,
-    ShellError,
     UndoError,
 )
 from src.utils.parser import Parser
@@ -41,27 +40,24 @@ class Undo(BaseClass):
         :raises UndoError: Если нет команд для отмены
         :raises ShellError: При ошибке выполнения отмены
         """
-        try:
-            last_commands = self._get_last_command_group()
+        last_commands = self._get_last_command_group()
 
-            if not last_commands:
-                last_command = self._get_last_command()
-                if not last_command:
-                    raise UndoError("Команды для отмены не найдены")
-                last_commands = [last_command]
+        if not last_commands:
+            last_command = self._get_last_command()
+            if not last_command:
+                raise UndoError("Команды для отмены не найдены")
+            last_commands = [last_command]
 
-            for cmd in last_commands:
-                parsed_tokens = self.parser.parse(cmd.strip().split())
+        for cmd in last_commands:
+            parsed_tokens = self.parser.parse(cmd.strip().split())
 
-                if parsed_tokens is None:
-                    continue
+            if parsed_tokens is None:
+                continue
 
-                if parsed_tokens.command in self.COMMANDS:
-                    self.COMMANDS[parsed_tokens.command](parsed_tokens)
+            if parsed_tokens.command in self.COMMANDS:
+                self.COMMANDS[parsed_tokens.command](parsed_tokens)
 
-            self._remove_last_lines(len(last_commands))
-        except Exception as message:
-            raise ShellError(str(message)) from None
+        self._remove_last_lines(len(last_commands))
 
     def _get_last_command_group(self) -> List[str]:
         """

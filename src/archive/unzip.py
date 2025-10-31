@@ -4,7 +4,6 @@ import re
 import zipfile
 
 from src.filesystem.base_command import BaseClass
-from src.utils.errors import ShellError
 
 
 class Unzip(BaseClass):
@@ -18,21 +17,16 @@ class Unzip(BaseClass):
         :param tokens: Аргументы команды (пути к файлу или директории)
         :raises ShellError: При ошибке распаковки архива
         """
-        try:
-            self._is_tokens(tokens)
-            paths = tokens.paths
+        self._is_tokens(tokens)
+        paths = tokens.paths
 
-            archive_path = self._abs_path(paths[0])
-            unzip_to = os.path.join(
-                os.getcwd(), re.sub(r"\.zip$", "", paths[0])
-            )
+        archive_path = self._abs_path(paths[0])
+        unzip_to = os.path.join(os.getcwd(), re.sub(r"\.zip$", "", paths[0]))
 
-            self._path_exists(archive_path)
-            self._is_file(archive_path)
+        self._path_exists(archive_path)
+        self._is_file(archive_path)
 
-            self._unzip(archive_path, unzip_to)
-        except Exception as message:
-            raise ShellError(str(message)) from None
+        self._unzip(archive_path, unzip_to)
 
     def _unzip(self, archive_path: str, unzip_to: str) -> None:
         """

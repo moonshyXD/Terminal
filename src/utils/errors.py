@@ -80,3 +80,9 @@ class RegualarVerbError(ShellError):
     """Регулярное выражение не является корректным"""
 
     pass
+
+
+class ExpressionSyntaxError(ShellError):
+    """Неправильно введенное выражение"""
+
+    pass

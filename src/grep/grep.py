@@ -7,7 +7,6 @@ from src.utils.errors import (
     InvalidFileError,
     NotAFileError,
     RegualarVerbError,
-    ShellError,
 )
 
 
@@ -22,15 +21,12 @@ class Grep(BaseClass):
         :param tokens: Аргументы команды (паттерн, флаги, пути к файлам)
         :raises ShellError: При ошибке выполнения поиска
         """
-        try:
-            ignore_case = tokens.ignore_case
-            recursive = tokens.recursive
-            regex = self._is_correct_regular(tokens, ignore_case)
-            paths = tokens.paths if tokens.paths else [os.getcwd()]
+        ignore_case = tokens.ignore_case or tokens.ri
+        recursive = tokens.recursive or tokens.ri
+        regex = self._is_correct_regular(tokens, ignore_case)
+        paths = tokens.paths if tokens.paths else [os.getcwd()]
 
-            self._grep_paths(paths, regex, recursive, ignore_case)
-        except Exception as message:
-            raise ShellError(message) from None
+        self._grep_paths(paths, regex, recursive, ignore_case)
 
     def _grep_paths(
         self,

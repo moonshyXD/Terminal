@@ -1,4 +1,3 @@
-# src/main.py
 import os
 import shlex
 import sys
@@ -80,9 +79,15 @@ class Terminal:
                 self.history.add_history(line)
 
                 Logger.success_execution(line.strip())
+            except ValueError as message:
+                print(
+                    f"{type(message).__name__}:",
+                    "Неправильно введенные аргументы в выражении",
+                )
+                Logger.failure_execution(message)
             except ShellError as message:
-                print(message)
-                Logger.failure_execution(str(message))
+                print(f"{type(message).__name__}: {message}")
+                Logger.failure_execution(message)
 
             print(f"> {os.getcwd()} ", end="", flush=True)
 

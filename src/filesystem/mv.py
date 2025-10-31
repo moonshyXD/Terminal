@@ -5,7 +5,7 @@ import re
 import shutil
 
 from src.filesystem.base_command import BaseClass
-from src.utils.errors import MovingError, PathNotFoundError, ShellError
+from src.utils.errors import MovingError, PathNotFoundError
 
 
 class Mv(BaseClass):
@@ -31,39 +31,35 @@ class Mv(BaseClass):
         :raises MovingError: При отсутствии прав доступа
         :raises PathNotFoundError: Если пути отсутствуют
         """
-        try:
-            self._is_tokens(tokens)
+        self._is_tokens(tokens)
 
-            paths = tokens.paths
+        paths = tokens.paths
 
-            abs_to_path = self._abs_path(paths[len(paths) - 1])
+        abs_to_path = self._abs_path(paths[len(paths) - 1])
 
-            for path in paths:
-                abs_from_path = self._abs_path(path)
+        for path in paths:
+            abs_from_path = self._abs_path(path)
 
-                self._path_exists(abs_from_path)
-                self._is_system_path(abs_from_path)
+            self._path_exists(abs_from_path)
+            self._is_system_path(abs_from_path)
 
-                if not os.access(abs_from_path, os.R_OK):
-                    message = (
-                        f"Невозможно получить доступ '{paths[0]}': "
-                        f"Нет прав доступа"
-                    )
-                    raise MovingError(message)
+            if not os.access(abs_from_path, os.R_OK):
+                message = (
+                    f"Невозможно получить доступ '{paths[0]}': "
+                    f"Нет прав доступа"
+                )
+                raise MovingError(message)
 
-                target_dir = os.path.dirname(abs_to_path) or "."
-                if not os.access(target_dir, os.W_OK):
-                    message = (
-                        f"Невозможно переместить '{paths[1]}': "
-                        f"Нет прав доступа"
-                    )
-                    raise MovingError(message)
+            target_dir = os.path.dirname(abs_to_path) or "."
+            if not os.access(target_dir, os.W_OK):
+                message = (
+                    f"Невозможно переместить '{paths[1]}': Нет прав доступа"
+                )
+                raise MovingError(message)
 
-                shutil.move(abs_from_path, abs_to_path)
+            shutil.move(abs_from_path, abs_to_path)
 
-            self._optimize_paths_for_undo(tokens)
-        except Exception as message:
-            raise ShellError(str(message)) from None
+        self._optimize_paths_for_undo(tokens)
 
     def _optimize_paths_for_undo(self, tokens: argparse.Namespace) -> None:
         """

@@ -1,7 +1,21 @@
 import argparse
-from typing import Optional
+from typing import NoReturn
 
 from src.utils.errors import ParserError
+
+
+class NoErrorParser(argparse.ArgumentParser):
+    """
+    ArgumentParser, который не выводит ошибки в stderr
+    """
+
+    def error(self, message: str) -> NoReturn:
+        """
+        Изменение ошибки, чтобы не выводить стандартную ошибку парсинга
+        :param message: Сообщение об ошибке
+        :raises ParserError: Вместо вывода в консоль
+        """
+        raise ParserError("Не удалось распарсить выражение") from None
 
 
 class Parser:
@@ -13,7 +27,7 @@ class Parser:
         """
         Инициализация парсера
         """
-        self.parser = argparse.ArgumentParser(
+        self.parser = NoErrorParser(
             description="Парсер для данных, введенных в терминал",
         )
 
@@ -25,7 +39,7 @@ class Parser:
 
         self._parser_setup()
 
-    def parse(self, arguments: list) -> Optional[argparse.Namespace]:
+    def parse(self, arguments: list) -> argparse.Namespace | None:
         """
         Парсит список аргументов командной строки
         :param arguments: Список аргументов для парсинга

@@ -21,7 +21,6 @@ class Cat(BaseClass):
 
             paths = tokens.paths
             for path in paths:
-                print(f"{path}: ")
                 abs_path = self._abs_path(path)
 
                 self._path_exists(abs_path)
@@ -30,5 +29,10 @@ class Cat(BaseClass):
                 path_to_read = Path(abs_path)
                 content = path_to_read.read_text(encoding="utf-8")
                 print(content)
-        except Exception as message:
-            raise ShellError(str(message)) from None
+
+        except PermissionError:
+            raise ShellError(f"Отказано в доступе: {abs_path}") from None
+        except UnicodeDecodeError:
+            raise ShellError(
+                f"Невозможно прочитать файл: {abs_path}"
+            ) from None

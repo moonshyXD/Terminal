@@ -21,3 +21,80 @@
 20 ls -al
 21 ls -la
 22 ls -l -a
+23 ls
+24 ls -l
+25 ls -l -l
+26 ls -a
+27 ls -al
+28 rm shell.log
+29 undo
+30 rm shell.log
+31 undo
+32 rm shell.log
+33 ls
+34 ls
+35 ls
+36 ls
+37 ls
+38 ls
+39 history
+40 ls
+41 ls
+42 ls
+43 ls
+44 ls
+45 ls
+46 ls
+47 cp -r tests huy
+48 rm -r huy
+49 touch huy
+50 rm huy
+51 zip tests huy
+52 zip src huy
+53 unzip huy.zip
+54 cd ..
+55 cd /
+56 ls
+57 history 0
+58 ls -l
+59 ls -l
+60 ls
+61 ls -l
+62 ls -l
+63 ls
+64 ls -l
+65 ls -l
+66 ls
+67 ls -l
+68 ls
+69 ls -l
+70 ls -l
+71 ls -l
+72 ls
+73 ls -l
+74 ls -l
+75 ls
+76 ls
+77 ls -l
+78 ls -l
+79 ls
+80 ls -l
+81 ls
+82 ls -l
+83 ls
+84 ls -l
+85 ls
+86 ls -l
+87 ls
+88 ls -l
+89 ls src
+90 ls
+91 ls
+92 cd ..
+93 ls
+94 ls FileManager
+95 cat README.md
+96 cat README.md
+97 ls
+98 ls
+99 tar tests/ huy

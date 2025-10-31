@@ -5,7 +5,6 @@ import tarfile
 from src.filesystem.base_command import (
     BaseClass,
 )
-from src.utils.errors import ShellError
 
 
 class Tar(BaseClass):
@@ -20,28 +19,25 @@ class Tar(BaseClass):
         :raises ShellError: При ошибке создания архива
         :raises InvalidPathError: Если путь содержит недопустимые символы
         """
-        try:
-            self._is_tokens(tokens)
-            paths = tokens.paths
+        self._is_tokens(tokens)
+        paths = tokens.paths
 
-            folder_tar = self._abs_path(paths[0])
+        folder_tar = self._abs_path(paths[0])
 
-            if len(paths) < 2:
-                archive_path = folder_tar + ".tar.gz"
-            else:
-                archive_path = self._abs_path(paths[1])
+        if len(paths) < 2:
+            archive_path = folder_tar + ".tar.gz"
+        else:
+            archive_path = self._abs_path(paths[1])
 
-            self._path_exists(folder_tar)
-            self._is_directory(folder_tar)
+        self._path_exists(folder_tar)
+        self._is_directory(folder_tar)
 
-            if not archive_path.endswith((".tar.gz", ".tgz")):
-                archive_path += ".tar.gz"
+        if not archive_path.endswith((".tar.gz", ".tgz")):
+            archive_path += ".tar.gz"
 
-            archive_name = os.path.basename(folder_tar.rstrip("/"))
+        archive_name = os.path.basename(folder_tar.rstrip("/"))
 
-            self._tar(folder_tar, archive_path, archive_name)
-        except Exception as message:
-            raise ShellError(str(message)) from None
+        self._tar(folder_tar, archive_path, archive_name)
 
     def _tar(
         self, folder_tar: str, archive_path: str, archive_name: str

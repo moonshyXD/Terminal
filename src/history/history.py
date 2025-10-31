@@ -3,7 +3,6 @@ import os
 from collections import deque
 
 from src.filesystem.base_command import BaseClass
-from src.utils.errors import ShellError
 
 
 class History(BaseClass):
@@ -23,13 +22,10 @@ class History(BaseClass):
         :param tokens: Аргументы команды (количество команд для отображения)
         :raises ShellError: При ошибке чтения файла истории
         """
-        try:
-            count_commands = tokens.count
-            history = self._get_history(count_commands)
-            for line in history:
-                print(line, end="")
-        except Exception as message:
-            raise ShellError(str(message)) from None
+        count_commands = tokens.count
+        history = self._get_history(count_commands)
+        for line in history:
+            print(line, end="")
 
     def _get_history(self, count_commands: int) -> deque[str]:
         """

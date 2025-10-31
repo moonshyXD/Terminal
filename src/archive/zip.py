@@ -3,7 +3,6 @@ import os
 import zipfile
 
 from src.filesystem.base_command import BaseClass
-from src.utils.errors import ShellError
 
 
 class Zip(BaseClass):
@@ -17,26 +16,23 @@ class Zip(BaseClass):
         :param tokens: Аргументы команды (пути к файлу или директории)
         :raises ShellError: При ошибке создания архива
         """
-        try:
-            self._is_tokens(tokens)
-            paths = tokens.paths
+        self._is_tokens(tokens)
+        paths = tokens.paths
 
-            folder_zip = self._abs_path(paths[0])
+        folder_zip = self._abs_path(paths[0])
 
-            if len(paths) < 2:
-                archive_path = folder_zip + ".zip"
-            else:
-                archive_path = self._abs_path(paths[1])
+        if len(paths) < 2:
+            archive_path = folder_zip + ".zip"
+        else:
+            archive_path = self._abs_path(paths[1])
 
-            self._path_exists(folder_zip)
-            self._is_directory(folder_zip)
+        self._path_exists(folder_zip)
+        self._is_directory(folder_zip)
 
-            if not archive_path.endswith(".zip"):
-                archive_path += ".zip"
+        if not archive_path.endswith(".zip"):
+            archive_path += ".zip"
 
-            self._zip(folder_zip, archive_path)
-        except Exception as message:
-            raise ShellError(str(message)) from None
+        self._zip(folder_zip, archive_path)
 
     def _zip(self, folder_zip: str, archive_path: str) -> None:
         """

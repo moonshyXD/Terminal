@@ -12,7 +12,7 @@ class Logger:
         Настраивает логирование
         """
         logging.basicConfig(
-            filename="logger/shell.log",
+            filename="shell.log",
             level=logging.INFO,
             format="[%(asctime)s] %(levelname)s: %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
@@ -35,9 +35,9 @@ class Logger:
         logging.info(f"SUCCESS: {command}")
 
     @classmethod
-    def failure_execution(cls, message: str) -> None:
+    def failure_execution(cls, message: Exception) -> None:
         """
         Логирует ошибку выполнения команды
         :param message: Сообщение об ошибке
         """
-        logging.error(message)
+        logging.error(f"{type(message).__name__}: {message}")
