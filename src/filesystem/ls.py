@@ -24,7 +24,8 @@ class Ls(BaseClass):
             else:
                 paths = [os.getcwd()]
 
-            detailed = tokens.l
+            detailed = tokens.l or tokens.al
+            all = tokens.all or tokens.al
 
             for path in paths:
                 abs_path = self._abs_path(path)
@@ -36,15 +37,15 @@ class Ls(BaseClass):
 
                 print(f"{path}:")
                 if detailed:
-                    self._print_detailed(items, abs_path)
+                    self._print_detailed(items, abs_path, all)
                 else:
-                    self._print_not_detailed(items)
+                    self._print_not_detailed(items, all)
 
                 print()
         except Exception as message:
             raise ShellError(str(message)) from None
 
-    def _print_detailed(self, items: list, abs_path: str) -> None:
+    def _print_detailed(self, items: list, abs_path: str, all: bool) -> None:
         """
         Выводит подробную информацию о файлах
         :param items: Список элементов директории
@@ -63,15 +64,15 @@ class Ls(BaseClass):
             mtime_str = mtime.strftime("%Y-%m-%d %H:%M")
 
             log = f"{mode} {item_size:>10} {mtime_str} {item}"
-            if item[0] != ".":
+            if item[0] != "." or all is True:
                 print(log)
 
-    def _print_not_detailed(self, items: list) -> None:
+    def _print_not_detailed(self, items: list, all: bool) -> None:
         """
         Выводит список файлов
         :param items: Список элементов директории
         """
         for item in sorted(items):
-            if item[0] != ".":
+            if item[0] != "." or all is True:
                 print(f"{item}", end=" ")
         print()

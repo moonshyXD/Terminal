@@ -74,6 +74,15 @@ class Parser:
         ls_parser.add_argument(
             "-l", action="store_true", help="Подробный вывод"
         )
+        ls_parser.add_argument(
+            "--all", "-a", action="store_true", help="Поддержка скрытых файлов"
+        )
+        ls_parser.add_argument(
+            "-al",
+            "-la",
+            action="store_true",
+            help="Подробный вывод файлов с поддержкой скрытых",
+        )
         ls_parser.add_argument("paths", nargs="*", help="Пути к директориям")
 
     def _cd_setup(self) -> None:

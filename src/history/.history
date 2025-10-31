@@ -7,3 +7,17 @@
 6 cd src
 7 cd history
 8 cd ..
+9 ls -a
+10 ls
+11 ls
+12 ls -a
+13 ls -a
+14 ls --all
+15 ls -l -a
+16 ls -l
+17 ls -al
+18 ls -l
+19 ls -a
+20 ls -al
+21 ls -la
+22 ls -l -a
