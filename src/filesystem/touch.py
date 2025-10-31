@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-from src.errors import AlreadyExistsError, ShellError
 from src.filesystem.base_command import BaseClass
+from src.utils.errors import AlreadyExistsError, ShellError
 
 
 class Touch(BaseClass):

@@ -2,13 +2,13 @@ import argparse
 import os
 import re
 
-from src.errors import (
+from src.filesystem.base_command import BaseClass
+from src.utils.errors import (
     InvalidFileError,
     NotAFileError,
     RegualarVerbError,
     ShellError,
 )
-from src.filesystem.base_command import BaseClass
 
 
 class Grep(BaseClass):

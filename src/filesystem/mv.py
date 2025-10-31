@@ -4,8 +4,8 @@ import os
 import re
 import shutil
 
-from src.errors import MovingError, PathNotFoundError, ShellError
 from src.filesystem.base_command import BaseClass
+from src.utils.errors import MovingError, PathNotFoundError, ShellError
 
 
 class Mv(BaseClass):

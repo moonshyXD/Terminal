@@ -1,7 +1,7 @@
 import argparse
 from typing import Optional
 
-from src.errors import ParserError
+from src.utils.errors import ParserError
 
 
 class Parser:

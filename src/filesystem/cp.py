@@ -4,8 +4,8 @@ import os
 import re
 import shutil
 
-from src.errors import PathNotFoundError, ShellError
 from src.filesystem.base_command import BaseClass
+from src.utils.errors import PathNotFoundError, ShellError
 
 
 class Cp(BaseClass):

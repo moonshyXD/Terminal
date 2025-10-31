@@ -3,8 +3,8 @@ import os
 import re
 import zipfile
 
-from src.errors import ShellError
 from src.filesystem.base_command import BaseClass
+from src.utils.errors import ShellError
 
 
 class Unzip(BaseClass):

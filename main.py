@@ -3,13 +3,13 @@ import os
 import shlex
 import sys
 
-from logger.logger import Logger
-from parser.parser import Parser
 from src.archive import tar, untar, unzip, zip
-from src.errors import ShellError
 from src.filesystem import cat, cd, cp, ls, mkdir, mv, rm, touch
 from src.grep import grep
 from src.history import history, undo
+from src.utils.errors import ShellError
+from src.utils.logger import Logger
+from src.utils.parser import Parser
 
 
 class Terminal:

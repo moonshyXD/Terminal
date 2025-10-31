@@ -2,10 +2,10 @@ import argparse
 import os
 import tarfile
 
-from src.errors import ShellError
 from src.filesystem.base_command import (
     BaseClass,
 )
+from src.utils.errors import ShellError
 
 
 class Tar(BaseClass):
