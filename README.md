@@ -61,7 +61,7 @@ ls -a
 git clone https://github.com/moonshyXD/Terminal
 ```
 
-Установите основные [зависимости для пользователя](https://github.com/moonshyXD/Terminal/tree/main?tab=readme-ov-file#%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8)
+Установите основные [зависимости для пользователя](https://github.com/moonshyXD/Terminal?tab=readme-ov-file#%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F)
 
 Для успешного запуска программы следует прописать в командной строке команду:
 ```bash
@@ -81,7 +81,7 @@ python -m main
 git clone https://github.com/moonshyXD/Terminal
 ```
 
-Установите основные [зависимости для пользователя](https://github.com/moonshyXD/Terminal/tree/main?tab=readme-ov-file#%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8) и перейдите к установке [зависимостей для разработчика](https://github.com/moonshyXD/Terminal/tree/main?tab=readme-ov-file#%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA%D0%B0)
+Установите основные [зависимости для пользователя](https://github.com/moonshyXD/Terminal?tab=readme-ov-file#%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F) и перейдите к установке [зависимостей для разработчика](https://github.com/moonshyXD/Terminal?tab=readme-ov-file#%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F)
 
 Для успешного запуска программы следует прописать в командной строке команду:
 ```bash
