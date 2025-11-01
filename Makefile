@@ -7,7 +7,6 @@ setup:
 
 .PHONY: lint
 lint:
-	@echo "Запуск линтера"
 	ruff format .
 	ruff check --fix
 	mypy .

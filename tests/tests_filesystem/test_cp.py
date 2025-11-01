@@ -24,7 +24,7 @@ class TestsCp:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("temp")
         destination = make_temp_directory / "destination.txt"
 
         tokens = argparse.Namespace(
@@ -33,7 +33,7 @@ class TestsCp:
         Cp().execute(tokens)
 
         assert destination.exists()
-        assert destination.read_text() == "content"
+        assert destination.read_text() == "temp"
         assert source.exists()
 
     def test_cp_directory_recursive(self, make_temp_structure: Path) -> None:
@@ -68,7 +68,7 @@ class TestsCp:
         :raises PathNotFoundError: При недостаточном количестве путей
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("temp")
 
         tokens = argparse.Namespace(paths=[str(source)], recursive=False)
         with pytest.raises(PathNotFoundError) as exc_info:
@@ -115,7 +115,7 @@ class TestsCp:
         :raises ShellError: При несуществующей целевой директории
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("temp")
         destination = make_temp_directory / "nonexistent" / "destination.txt"
 
         tokens = argparse.Namespace(
@@ -149,7 +149,7 @@ class TestsCp:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("temp")
         destination = make_temp_directory / "destination.txt"
 
         tokens = argparse.Namespace(
@@ -191,7 +191,7 @@ class TestsCp:
         :param monkeypatch: Фикстура для изменения окружения
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("temp")
         destination = make_temp_directory / "destination.txt"
 
         monkeypatch.chdir(make_temp_directory)
@@ -202,7 +202,7 @@ class TestsCp:
         Cp().execute(tokens)
 
         assert destination.exists()
-        assert destination.read_text() == "content"
+        assert destination.read_text() == "temp"
 
     def test_cp_absolute_paths(self, make_temp_directory: Path) -> None:
         """
@@ -210,7 +210,7 @@ class TestsCp:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("temp")
         destination = make_temp_directory / "destination.txt"
 
         tokens = argparse.Namespace(
@@ -220,7 +220,7 @@ class TestsCp:
         Cp().execute(tokens)
 
         assert destination.exists()
-        assert destination.read_text() == "content"
+        assert destination.read_text() == "temp"
         assert source.exists()
 
     def test_cp_directory_with_trailing_slash(

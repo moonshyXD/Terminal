@@ -26,7 +26,7 @@ class TestsGrep:
         :param capsys: Фикстура для захвата stdout
         """
         file = make_temp_directory / "test.txt"
-        file.write_text("hello world\nfoo bar\nhello again")
+        file.write_text("hello world\nfoo bar\nhello goose")
 
         tokens = argparse.Namespace(
             pattern=["hello"],
@@ -39,7 +39,7 @@ class TestsGrep:
         captured = capsys.readouterr()
 
         assert "hello world" in captured.out
-        assert "hello again" in captured.out
+        assert "hello goose" in captured.out
 
     def test_grep_ignore_case_flag(
         self, make_temp_directory: Path, capsys: CaptureFixture[str]
@@ -50,7 +50,7 @@ class TestsGrep:
         :param capsys: Фикстура для захвата stdout
         """
         file = make_temp_directory / "test.txt"
-        file.write_text("Hello world\nFOO bar\nhello again")
+        file.write_text("Hello world\nFOO bar\nhello goose")
 
         tokens = argparse.Namespace(
             pattern=["hello"],
@@ -63,7 +63,7 @@ class TestsGrep:
         captured = capsys.readouterr()
 
         assert "Hello world" in captured.out
-        assert "hello again" in captured.out
+        assert "hello goose" in captured.out
 
     def test_grep_ri_flag(
         self, make_temp_directory: Path, capsys: CaptureFixture[str]
@@ -76,7 +76,7 @@ class TestsGrep:
         (make_temp_directory / "file1.txt").write_text("Hello world")
         subdir = make_temp_directory / "subdir"
         subdir.mkdir()
-        (subdir / "file2.txt").write_text("HELLO again")
+        (subdir / "file2.txt").write_text("HELLO goose")
 
         tokens = argparse.Namespace(
             pattern=["hello"],
@@ -89,7 +89,7 @@ class TestsGrep:
         captured = capsys.readouterr()
 
         assert "Hello world" in captured.out
-        assert "HELLO again" in captured.out
+        assert "HELLO goose" in captured.out
 
     def test_grep_no_matches(
         self, make_temp_directory: Path, capsys: CaptureFixture[str]
@@ -191,7 +191,7 @@ class TestsGrep:
         :param monkeypatch: Фикстура для изменения окружения
         """
         file = make_temp_directory / "test.txt"
-        file.write_text("hello world")
+        file.write_text("hello goose")
         monkeypatch.chdir(make_temp_directory)
 
         tokens = argparse.Namespace(
@@ -204,7 +204,7 @@ class TestsGrep:
         Grep().execute(tokens)
         captured = capsys.readouterr()
 
-        assert "hello world" in captured.out
+        assert "hello goose" in captured.out
 
     def test_grep_directory_without_recursive_raises_error(
         self, make_temp_directory: Path
@@ -235,7 +235,7 @@ class TestsGrep:
         (make_temp_directory / "file1.txt").write_text("hello world")
         subdir = make_temp_directory / "subdir"
         subdir.mkdir()
-        (subdir / "file2.txt").write_text("hello again")
+        (subdir / "file2.txt").write_text("hello goose")
 
         tokens = argparse.Namespace(
             pattern=["hello"],
@@ -248,7 +248,7 @@ class TestsGrep:
         captured = capsys.readouterr()
 
         assert "hello world" in captured.out
-        assert "hello again" in captured.out
+        assert "hello goose" in captured.out
 
     def test_grep_nonexistent_file_raises_error(
         self, make_temp_directory: Path
@@ -279,7 +279,7 @@ class TestsGrep:
         file1 = make_temp_directory / "file1.txt"
         file2 = make_temp_directory / "file2.txt"
         file1.write_text("hello world")
-        file2.write_text("hello again")
+        file2.write_text("hello goose")
 
         tokens = argparse.Namespace(
             pattern=["hello"],
@@ -292,7 +292,7 @@ class TestsGrep:
         captured = capsys.readouterr()
 
         assert "hello world" in captured.out
-        assert "hello again" in captured.out
+        assert "hello goose" in captured.out
 
     def test_grep_empty_file(
         self, make_temp_directory: Path, capsys: CaptureFixture[str]

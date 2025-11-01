@@ -27,7 +27,7 @@ class TestsMv:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("goose")
         destination = make_temp_directory / "destination.txt"
 
         tokens = argparse.Namespace(paths=[str(source), str(destination)])
@@ -35,7 +35,7 @@ class TestsMv:
 
         assert not source.exists()
         assert destination.exists()
-        assert destination.read_text() == "content"
+        assert destination.read_text() == "goose"
 
     def test_mv_file_to_directory(self, make_temp_directory: Path) -> None:
         """
@@ -43,7 +43,7 @@ class TestsMv:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("goose")
         destination_dir = make_temp_directory / "destdir"
         destination_dir.mkdir()
 
@@ -53,7 +53,7 @@ class TestsMv:
         moved_file = destination_dir / "source.txt"
         assert not source.exists()
         assert moved_file.exists()
-        assert moved_file.read_text() == "content"
+        assert moved_file.read_text() == "goose"
 
     def test_mv_rename_file(self, make_temp_directory: Path) -> None:
         """
@@ -61,7 +61,7 @@ class TestsMv:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "old.txt"
-        source.write_text("content")
+        source.write_text("goose")
         destination = make_temp_directory / "new.txt"
 
         tokens = argparse.Namespace(paths=[str(source), str(destination)])
@@ -79,8 +79,8 @@ class TestsMv:
         file2 = make_temp_directory / "file2.txt"
         dest_dir = make_temp_directory / "destdir"
 
-        file1.write_text("content1")
-        file2.write_text("content2")
+        file1.write_text("goose1")
+        file2.write_text("goose2")
         dest_dir.mkdir()
 
         tokens = argparse.Namespace(
@@ -110,7 +110,7 @@ class TestsMv:
         :raises PathNotFoundError: При недостаточном количестве путей
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("c")
 
         tokens = argparse.Namespace(paths=[str(source)])
         with pytest.raises(PathNotFoundError) as exc_info:
@@ -152,7 +152,7 @@ class TestsMv:
         :raises MovingError: При отсутствии прав чтения
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("goose")
         source.chmod(0o000)
 
         destination = make_temp_directory / "destination.txt"
@@ -174,7 +174,7 @@ class TestsMv:
         :raises MovingError: При отсутствии прав записи
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("goose")
 
         readonly_dir = make_temp_directory / "readonly"
         readonly_dir.mkdir()
@@ -199,7 +199,7 @@ class TestsMv:
         :param monkeypatch: Фикстура для изменения окружения
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("goose")
         destination = make_temp_directory / "destination.txt"
 
         monkeypatch.chdir(make_temp_directory)
@@ -216,7 +216,7 @@ class TestsMv:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("goose")
         destination = make_temp_directory / "destination.txt"
 
         tokens = argparse.Namespace(paths=[str(source), str(destination)])
@@ -251,7 +251,7 @@ class TestsMv:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "file with spaces.txt"
-        source.write_text("content")
+        source.write_text("goose")
         destination = make_temp_directory / "new file with spaces.txt"
 
         tokens = argparse.Namespace(paths=[str(source), str(destination)])
@@ -266,7 +266,7 @@ class TestsMv:
         :param make_temp_directory: Фикстура для временных директорий
         """
         source = make_temp_directory / "source.txt"
-        source.write_text("content")
+        source.write_text("goose")
         destination = make_temp_directory / "destination.txt"
 
         tokens = argparse.Namespace(

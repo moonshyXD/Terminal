@@ -169,7 +169,7 @@ class TestsUndo:
         undo_history = (
             make_temp_directory / "src" / "history" / ".undo_history"
         )
-        undo_history.write_text("line1\nline2\nline3\nline4\n")
+        undo_history.write_text("goose1\ngoose2\ngoose3\ngoose4\n")
 
         monkeypatch.chdir(make_temp_directory)
         undo = Undo()
@@ -177,10 +177,10 @@ class TestsUndo:
         undo._remove_last_lines(2)
 
         content = undo_history.read_text()
-        assert "line1" in content
-        assert "line2" in content
-        assert "line3" not in content
-        assert "line4" not in content
+        assert "goose1" in content
+        assert "goose2" in content
+        assert "goose3" not in content
+        assert "goose4" not in content
 
     def test_undo_cp_removes_file(
         self,
@@ -195,7 +195,7 @@ class TestsUndo:
         :param monkeypatch: Фикстура для изменения окружения
         """
         file_to_remove = make_temp_directory / "copied_file.txt"
-        file_to_remove.write_text("content")
+        file_to_remove.write_text("goose")
 
         monkeypatch.chdir(make_temp_directory)
         undo = Undo()
@@ -219,7 +219,7 @@ class TestsUndo:
         """
         dir_to_remove = make_temp_directory / "copied_dir"
         dir_to_remove.mkdir()
-        (dir_to_remove / "file.txt").write_text("content")
+        (dir_to_remove / "file.txt").write_text("goose")
 
         monkeypatch.chdir(make_temp_directory)
         undo = Undo()
@@ -239,7 +239,7 @@ class TestsUndo:
         """
         file_in_new = make_temp_directory / "new_location" / "file.txt"
         file_in_new.parent.mkdir()
-        file_in_new.write_text("content")
+        file_in_new.write_text("goose")
 
         original_location = make_temp_directory / "original"
         original_location.mkdir()
@@ -267,7 +267,7 @@ class TestsUndo:
         trash.mkdir(parents=True, exist_ok=True)
 
         deleted_file = trash / "deleted.txt"
-        deleted_file.write_text("content")
+        deleted_file.write_text("goose")
 
         restore_dir = make_temp_directory / "restore"
         restore_dir.mkdir()
@@ -318,7 +318,7 @@ class TestsUndo:
 
         trash = make_temp_directory / "src" / "history" / ".trash"
         trash.mkdir(parents=True, exist_ok=True)
-        (trash / "file.txt").write_text("content")
+        (trash / "file.txt").write_text("goose")
 
         monkeypatch.chdir(make_temp_directory)
         undo = Undo()
@@ -338,7 +338,7 @@ class TestsUndo:
         """
         file_in_new = make_temp_directory / "new" / "file.txt"
         file_in_new.parent.mkdir()
-        file_in_new.write_text("content")
+        file_in_new.write_text("goose")
 
         original = make_temp_directory / "original"
         original.mkdir()

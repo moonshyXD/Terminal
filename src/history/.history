@@ -8,3 +8,6 @@
 7 ls -l
 8 grep 123 README.md
 9 ls
+10 touch huy huy1
+11 mkdir huy1 huy2
+12 rm -r huy1 huy2

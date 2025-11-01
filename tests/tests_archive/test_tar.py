@@ -30,7 +30,7 @@ class TestsTar:
         """
         folder = make_temp_directory / "folder_to_tar"
         folder.mkdir()
-        (folder / "file.txt").write_text("content")
+        (folder / "file.txt").write_text("goose")
 
         monkeypatch.chdir(make_temp_directory)
         tar = Tar()
@@ -51,7 +51,7 @@ class TestsTar:
         """
         folder = make_temp_directory / "folder_to_tar"
         folder.mkdir()
-        (folder / "file.txt").write_text("content")
+        (folder / "file.txt").write_text("goose")
 
         custom_archive = make_temp_directory / "custom_name.tar.gz"
 
@@ -73,7 +73,7 @@ class TestsTar:
         """
         folder = make_temp_directory / "folder_to_tar"
         folder.mkdir()
-        (folder / "file.txt").write_text("content")
+        (folder / "file.txt").write_text("goose")
 
         archive_without_ext = make_temp_directory / "archive"
 
@@ -97,7 +97,7 @@ class TestsTar:
         """
         folder = make_temp_directory / "folder_to_tar"
         folder.mkdir()
-        (folder / "file.txt").write_text("content")
+        (folder / "file.txt").write_text("goose")
 
         archive_tgz = make_temp_directory / "archive.tgz"
 
@@ -121,8 +121,8 @@ class TestsTar:
         folder.mkdir()
         subdir = folder / "subdir"
         subdir.mkdir()
-        (folder / "file1.txt").write_text("content1")
-        (subdir / "file2.txt").write_text("content2")
+        (folder / "file1.txt").write_text("goose1")
+        (subdir / "file2.txt").write_text("goose2")
 
         monkeypatch.chdir(make_temp_directory)
         tar = Tar()
@@ -204,7 +204,7 @@ class TestsTar:
         :raises NotADirectoryError: При попытке архивировать файл
         """
         file = make_temp_directory / "file.txt"
-        file.write_text("content")
+        file.write_text("goose")
 
         monkeypatch.chdir(make_temp_directory)
         tar = Tar()
@@ -224,7 +224,7 @@ class TestsTar:
         """
         folder = make_temp_directory / "folder_to_tar"
         folder.mkdir()
-        (folder / "file.txt").write_text("content")
+        (folder / "file.txt").write_text("goose")
 
         monkeypatch.chdir(make_temp_directory)
         tar = Tar()
