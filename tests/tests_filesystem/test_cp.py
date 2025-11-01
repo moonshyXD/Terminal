@@ -48,9 +48,8 @@ class TestsCp:
         )
         Cp().execute(tokens)
 
-        assert (destination / "temp_directory").exists()
-        assert (destination / "temp_directory" / "file1.txt").exists()
-        assert (destination / "temp_directory" / "file2.txt").exists()
+        assert (destination / "file1.txt").exists()
+        assert (destination / "file2.txt").exists()
 
     def test_cp_no_paths_raises_error(self) -> None:
         """
@@ -239,7 +238,7 @@ class TestsCp:
         )
         Cp().execute(tokens)
 
-        assert (destination / "temp_directory").exists()
+        assert destination.exists()
 
     def test_cp_empty_file(self, make_temp_directory: Path) -> None:
         """

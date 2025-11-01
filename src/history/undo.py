@@ -126,10 +126,8 @@ class Undo(BaseClass):
         if os.path.exists(copied_path):
             if os.path.isdir(copied_path):
                 shutil.rmtree(copied_path)
-                print(f"Отменено копирование директории: {copied_path}")
             else:
                 os.remove(copied_path)
-                print(f"Отменено копирование файла: {copied_path}")
         else:
             print(f"Файл уже удалён: {copied_path}")
 

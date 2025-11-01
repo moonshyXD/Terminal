@@ -16,10 +16,6 @@ lint:
 run:
 	$(PYTHON) -m main
 
-.PHONY: test
-test:
-	pytest tests
-
 .PHONY: testcover
 testcover:
 	pytest --cov=src --cov-report=term-missing

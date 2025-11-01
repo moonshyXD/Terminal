@@ -204,8 +204,6 @@ class TestsUndo:
         undo._undo_cp(tokens)
 
         assert not file_to_remove.exists()
-        captured = capsys.readouterr()
-        assert "Отменено копирование файла" in captured.out
 
     def test_undo_cp_removes_directory(
         self,
@@ -230,8 +228,6 @@ class TestsUndo:
         undo._undo_cp(tokens)
 
         assert not dir_to_remove.exists()
-        captured = capsys.readouterr()
-        assert "Отменено копирование директории" in captured.out
 
     def test_undo_mv_restores_file(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch

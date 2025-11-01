@@ -1,7 +1,6 @@
 import argparse
 import logging
 import os
-import re
 import shutil
 
 from src.filesystem.base_command import BaseClass
@@ -42,19 +41,13 @@ class Cp(BaseClass):
         if directory:
             self._is_directory(abs_from_path)
 
-            match = re.search(r"([^/]+)/?$", abs_from_path)
-            if match is not None:
-                copied_directory = match.group(1)
-
-            target_path = os.path.join(abs_to_path, copied_directory)
-
             shutil.copytree(
                 abs_from_path,
-                target_path,
+                abs_to_path,
                 dirs_exist_ok=True,
             )
 
-            self._save_undo_info(target_path)
+            self._save_undo_info(abs_to_path)
         else:
             directory_path = os.path.dirname(abs_to_path)
             self._path_exists(directory_path)
