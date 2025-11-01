@@ -12,3 +12,13 @@
 [2025-11-01 17:28:44] INFO: SUCCESS: grep 123 README.md
 [2025-11-01 17:28:52] INFO: STARTED: grep -ir 123 tests
 [2025-11-01 17:28:52] ERROR: InvalidFileError: Файл /mnt/c/Projects/Laba_Python/FileManager/tests/tests_archive/__pycache__/test_tar.cpython-312-pytest-8.4.2.pyc невозможно прочитать
+[2025-11-01 17:30:09] INFO: STARTED: dkjaskdjsajkldasjlkdsal
+[2025-11-01 17:30:09] ERROR: ParserError: Не удалось распарсить выражение
+[2025-11-01 17:30:10] INFO: STARTED: dasjlkdjasjkdjlkasd
+[2025-11-01 17:30:10] ERROR: ParserError: Не удалось распарсить выражение
+[2025-11-01 17:30:11] INFO: STARTED: daslkdaslkdklas
+[2025-11-01 17:30:11] ERROR: ParserError: Не удалось распарсить выражение
+[2025-11-01 17:30:12] INFO: STARTED: lkdkajsdlkas
+[2025-11-01 17:30:12] ERROR: ParserError: Не удалось распарсить выражение
+[2025-11-01 17:30:13] INFO: STARTED: ls
+[2025-11-01 17:30:13] INFO: SUCCESS: ls
