@@ -4,14 +4,15 @@ import os
 import re
 import shutil
 
-from src.errors import PathNotFoundError, ShellError
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
+from src.utils.errors import PathNotFoundError
 
 
 class Cp(BaseClass):
     """
     Класс для копирования файлов и директорий
     """
+
     def __init__(self) -> None:
         """
         Инициализация команды копирования с путём истории отмены
@@ -28,47 +29,40 @@ class Cp(BaseClass):
         :raises ShellError: При ошибке копирования
         :raises PathNotFoundError: Если пути отсутствуют
         """
-        try:
-            self._is_tokens(tokens)
+        self._is_tokens(tokens)
 
-            paths = tokens.paths
-            directory = tokens.recursive
+        paths = tokens.paths
+        directory = tokens.recursive
 
-            abs_from_path = self._abs_path(paths[0])
-            abs_to_path = self._abs_path(paths[1])
+        abs_from_path = self._abs_path(paths[0])
+        abs_to_path = self._abs_path(paths[1])
 
-            self._path_exists(abs_from_path)
+        self._path_exists(abs_from_path)
 
-            if directory:
-                self._is_directory(abs_from_path)
-                self._path_exists(abs_to_path)
+        if directory:
+            self._is_directory(abs_from_path)
 
-                match = re.search(r"([^/]+)/?$", abs_from_path)
-                if match is not None:
-                    copied_directory = match.group(1)
-                else:
-                    raise ShellError(f"Неверный путь: {abs_from_path}")
+            match = re.search(r"([^/]+)/?$", abs_from_path)
+            if match is not None:
+                copied_directory = match.group(1)
 
-                target_path = os.path.join(abs_to_path, copied_directory)
+            target_path = os.path.join(abs_to_path, copied_directory)
 
-                shutil.copytree(
-                    abs_from_path,
-                    target_path,
-                    dirs_exist_ok=True,
-                )
+            shutil.copytree(
+                abs_from_path,
+                target_path,
+                dirs_exist_ok=True,
+            )
 
-                self._save_undo_info(target_path)
-            else:
-                directory_path = os.path.dirname(abs_to_path)
-                self._path_exists(directory_path)
-                self._is_file(abs_from_path)
+            self._save_undo_info(target_path)
+        else:
+            directory_path = os.path.dirname(abs_to_path)
+            self._path_exists(directory_path)
+            self._is_file(abs_from_path)
 
-                shutil.copy(abs_from_path, abs_to_path)
+            shutil.copy(abs_from_path, abs_to_path)
 
-                self._save_undo_info(abs_to_path)
-
-        except Exception as message:
-            raise ShellError(str(message)) from None
+            self._save_undo_info(abs_to_path)
 
     def _save_undo_info(self, copied_path: str) -> None:
         """

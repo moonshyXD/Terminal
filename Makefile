@@ -1,5 +1,10 @@
 PYTHON = python3
 
+.PHONY: setup
+setup:
+	curl -LsSf https://astral.sh/uv/install.sh | sh
+	uv sync
+
 .PHONY: lint
 lint:
 	@echo "Запуск линтера"
@@ -9,4 +14,12 @@ lint:
 
 .PHONY: run
 run:
-	$(PYTHON) -m src.main
+	$(PYTHON) -m main
+
+.PHONY: test
+test:
+	pytest tests
+
+.PHONY: testcover
+testcover:
+	pytest --cov=src --cov-report=term-missing

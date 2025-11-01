@@ -1,34 +1,39 @@
 import argparse
 import os
 import re
-from typing import Pattern
 
-from src.errors import InvalidFileError, NotAFileError, ShellError
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
+from src.utils.errors import (
+    InvalidFileError,
+    NotAFileError,
+    RegualarVerbError,
+)
 
 
 class Grep(BaseClass):
     """
     Класс для поиска текста по регулярному выражению в файлах
     """
+
     def execute(self, tokens: argparse.Namespace) -> None:
         """
         Выполняет поиск по паттерну в файлах и директориях
         :param tokens: Аргументы команды (паттерн, флаги, пути к файлам)
         :raises ShellError: При ошибке выполнения поиска
         """
-        try:
-            regex = re.compile("".join(tokens.pattern[0]))
-            ignore_case = tokens.ignore_case
-            recursive = tokens.recursive
-            paths = tokens.paths if tokens.paths else [os.getcwd()]
+        ignore_case = tokens.ignore_case or tokens.ri
+        recursive = tokens.recursive or tokens.ri
+        regex = self._is_correct_regular(tokens, ignore_case)
+        paths = tokens.paths if tokens.paths else [os.getcwd()]
 
-            self._grep_paths(paths, regex, recursive, ignore_case)
-        except Exception as message:
-            raise ShellError(str(message)) from None
+        self._grep_paths(paths, regex, recursive, ignore_case)
 
     def _grep_paths(
-        self, paths: list, regex: Pattern, recursive: bool, ignore_case: bool
+        self,
+        paths: list,
+        regex: re.Pattern,
+        recursive: bool,
+        ignore_case: bool,
     ) -> None:
         """
         Обрабатывает список путей для поиска
@@ -54,7 +59,7 @@ class Grep(BaseClass):
                     raise NotAFileError(f"{abs_path} не является файлом")
 
     def _find_coincidence(
-        self, file_path: str, regex: Pattern, ignore_case: bool
+        self, file_path: str, regex: re.Pattern, ignore_case: bool
     ) -> None:
         """
         Ищет совпадения регулярного выражения в файле
@@ -67,14 +72,35 @@ class Grep(BaseClass):
             line_number = 1
             with open(file_path, "r", encoding="utf-8") as file:
                 for line in file:
-                    if ignore_case:
-                        line = line.lower()
+                    search_line = line.lower() if ignore_case else line
 
-                    if regex.search(line):
+                    if regex.search(search_line):
                         print(f"{file_path}:{line_number}:{line.rstrip()}")
 
                     line_number += 1
         except UnicodeDecodeError:
             raise InvalidFileError(
                 f"Файл {file_path} невозможно прочитать"
+            ) from None
+
+    def _is_correct_regular(
+        self, tokens: argparse.Namespace, ignore_case: bool
+    ):
+        """
+        Компилирует регулярное выражение с учётом флагов
+        :param tokens: Аргументы команды (паттерн)
+        :return: Скомпилированное регулярное выражение
+        :raises RegualarVerbError: Неверное регулярное выражение
+        """
+        try:
+            regex = "".join(tokens.pattern[0])
+            compiled_regex = (
+                re.compile(regex, re.IGNORECASE)
+                if ignore_case
+                else re.compile(regex)
+            )
+            return compiled_regex
+        except re.error:
+            raise RegualarVerbError(
+                "Неккоректное регулярное выражение"
             ) from None

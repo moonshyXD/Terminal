@@ -1,18 +1,33 @@
 import argparse
-from typing import Optional
+from typing import NoReturn
 
-from src.errors import ParserError
+from src.utils.errors import ParserError
+
+
+class NoErrorParser(argparse.ArgumentParser):
+    """
+    ArgumentParser, который не выводит ошибки в stderr
+    """
+
+    def error(self, message: str) -> NoReturn:
+        """
+        Изменение ошибки, чтобы не выводить стандартную ошибку парсинга
+        :param message: Сообщение об ошибке
+        :raises ParserError: Вместо вывода в консоль
+        """
+        raise ParserError("Не удалось распарсить выражение") from None
 
 
 class Parser:
     """
     Класс для парсинга аргументов
     """
+
     def __init__(self) -> None:
         """
         Инициализация парсера
         """
-        self.parser = argparse.ArgumentParser(
+        self.parser = NoErrorParser(
             description="Парсер для данных, введенных в терминал",
         )
 
@@ -24,7 +39,7 @@ class Parser:
 
         self._parser_setup()
 
-    def parse(self, arguments: list) -> Optional[argparse.Namespace]:
+    def parse(self, arguments: list) -> argparse.Namespace | None:
         """
         Парсит список аргументов командной строки
         :param arguments: Список аргументов для парсинга
@@ -35,7 +50,10 @@ class Parser:
             parsed_arguments = self.parser.parse_args(arguments)
 
             return parsed_arguments
-        except SystemExit:
+        except SystemExit as message:
+            if message.code == 0:
+                return None
+
             raise ParserError("Не удалось распарсить выражение") from None
 
     def _parser_setup(self) -> None:
@@ -55,6 +73,9 @@ class Parser:
         self._tar_setup()
         self._untar_setup()
         self._grep_setup()
+        self._stop_setup()
+        self._touch_setup()
+        self._mkdir_setup()
 
     def _ls_setup(self) -> None:
         """
@@ -66,6 +87,15 @@ class Parser:
         )
         ls_parser.add_argument(
             "-l", action="store_true", help="Подробный вывод"
+        )
+        ls_parser.add_argument(
+            "--all", "-a", action="store_true", help="Поддержка скрытых файлов"
+        )
+        ls_parser.add_argument(
+            "-al",
+            "-la",
+            action="store_true",
+            help="Подробный вывод файлов с поддержкой скрытых",
         )
         ls_parser.add_argument("paths", nargs="*", help="Пути к директориям")
 
@@ -219,7 +249,40 @@ class Parser:
             action="store_true",
             help="Поиск без учёта регистра",
         )
+        grep_parser.add_argument(
+            "-ri",
+            "-ir",
+            action="store_true",
+            help="Поиск без учёта регистра в подкаталогах",
+        )
         grep_parser.add_argument("pattern", nargs=1, help="Шаблон для поиска")
         grep_parser.add_argument(
             "paths", nargs="*", help="Файлы или каталоги для поиска"
         )
+
+    def _mkdir_setup(self) -> None:
+        """
+        Настраивает парсер для команды mkdir
+        """
+        mkdir_parser = self.subparsers.add_parser(
+            "mkdir", help="Создание пустой директории"
+        )
+        mkdir_parser.add_argument(
+            "paths", nargs="*", help="Директория для создания"
+        )
+
+    def _touch_setup(self) -> None:
+        """
+        Настраивает парсер для команды touch
+        """
+        touch_parser = self.subparsers.add_parser(
+            "touch",
+            help="Создание пустого файла/обновление времени модификации",
+        )
+        touch_parser.add_argument("paths", nargs="*", help="Файл для создания")
+
+    def _stop_setup(self) -> None:
+        """
+        Настраивает парсер для команды stop
+        """
+        self.subparsers.add_parser("stop", help="Завершение работы программы")

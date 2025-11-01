@@ -4,19 +4,22 @@ import os
 import re
 import shutil
 
-from src.errors import MovingError, PathNotFoundError, ShellError
-from src.file_commands.base_command import BaseClass
+from src.filesystem.base_command import BaseClass
+from src.utils.errors import MovingError, PathNotFoundError
 
 
 class Mv(BaseClass):
     """
     Класс для перемещения и переименования файлов и директорий
     """
+
     def __init__(self) -> None:
         """
         Инициализация команды перемещения с путём к истории отмены
         """
-        self.undo_history_path = os.path.join(
+        self._history_path = os.path.join(os.getcwd(), "src/history/.history")
+        self._trash_path = os.path.join(os.getcwd(), "src/history/.trash")
+        self._undo_history_path = os.path.join(
             os.getcwd(), "src/history/.undo_history"
         )
 
@@ -28,40 +31,35 @@ class Mv(BaseClass):
         :raises MovingError: При отсутствии прав доступа
         :raises PathNotFoundError: Если пути отсутствуют
         """
-        try:
-            self._is_tokens(tokens)
+        self._is_tokens(tokens)
 
-            paths = tokens.paths
+        paths = tokens.paths
 
-            abs_to_path = self._abs_path(paths[len(paths) - 1])
+        abs_to_path = self._abs_path(paths[len(paths) - 1])
 
-            for path in paths:
-                abs_from_path = self._abs_path(path)
+        for path in paths:
+            abs_from_path = self._abs_path(path)
 
-                self._path_exists(abs_from_path)
+            self._path_exists(abs_from_path)
+            self._is_system_path(abs_from_path)
 
-                if not os.access(abs_from_path, os.R_OK):
-                    message = (
-                        f"Невозможно получить доступ '{paths[0]}': "
-                        f"Нет прав доступа"
-                    )
-                    logging.error(message)
-                    raise MovingError(message)
+            if not os.access(abs_from_path, os.R_OK):
+                message = (
+                    f"Невозможно получить доступ '{paths[0]}': "
+                    f"Нет прав доступа"
+                )
+                raise MovingError(message)
 
-                target_dir = os.path.dirname(abs_to_path) or "."
-                if not os.access(target_dir, os.W_OK):
-                    message = (
-                        f"Невозможно переместить '{paths[1]}': "
-                        f"Нет прав доступа"
-                    )
-                    logging.error(message)
-                    raise MovingError(message)
+            target_dir = os.path.dirname(abs_to_path) or "."
+            if not os.access(target_dir, os.W_OK):
+                message = (
+                    f"Невозможно переместить '{paths[1]}': Нет прав доступа"
+                )
+                raise MovingError(message)
 
-                shutil.move(abs_from_path, abs_to_path)
+            shutil.move(abs_from_path, abs_to_path)
 
-            self._optimize_paths_for_undo(tokens)
-        except Exception as message:
-            raise ShellError(str(message)) from None
+        self._optimize_paths_for_undo(tokens)
 
     def _optimize_paths_for_undo(self, tokens: argparse.Namespace) -> None:
         """
@@ -81,7 +79,7 @@ class Mv(BaseClass):
                 undo_line = f"mv {final_path} {original_dir}\n"
 
                 with open(
-                    self.undo_history_path, "a", encoding="utf-8"
+                    self._undo_history_path, "a", encoding="utf-8"
                 ) as file:
                     file.write(undo_line)
 
@@ -95,3 +93,13 @@ class Mv(BaseClass):
             message = "Отсутствует путь файла"
             logging.error(message)
             raise PathNotFoundError(message) from None
+
+    def _is_system_path(self, path: str):
+        system_paths = [
+            self._undo_history_path,
+            self._history_path,
+            self._trash_path,
+        ]
+
+        if path in system_paths:
+            raise MovingError("Нельзя переместить эти системные файлы")
