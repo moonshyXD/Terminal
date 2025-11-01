@@ -88,6 +88,9 @@ class Terminal:
             except ShellError as message:
                 print(f"{type(message).__name__}: {message}")
                 Logger.failure_execution(message)
+            except Exception as message:
+                print(f"{type(message).__name__}: {message}")
+                Logger.failure_execution(message)
 
             print(f"> {os.getcwd()} ", end="", flush=True)
 

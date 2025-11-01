@@ -4,3 +4,6 @@
 3 ls
 4 ls
 5 ls
+6 ls
+7 ls -l
+8 grep 123 README.md
