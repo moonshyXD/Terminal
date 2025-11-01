@@ -154,7 +154,7 @@ class TestsLs:
         self, make_temp_directory: Path, capsys: CaptureFixture[str]
     ) -> None:
         """
-        Проверяет флаг all для скрытых файлов
+        Проверяет флаг -all для скрытых файлов
         :param make_temp_directory: Фикстура для временных директорий
         :param capsys: Фикстура для захвата stdout
         """
@@ -174,7 +174,7 @@ class TestsLs:
         self, make_temp_directory: Path, capsys: CaptureFixture[str]
     ) -> None:
         """
-        Проверяет скрытие скрытых файлов без флага all
+        Проверяет скрытие скрытых файлов без флага -all
         :param make_temp_directory: Фикстура для временных директорий
         :param capsys: Фикстура для захвата stdout
         """
@@ -232,7 +232,7 @@ class TestsLs:
         self, make_temp_directory: Path
     ) -> None:
         """
-        Проверяет ошибку при попытке листить файл
+        Проверяет ошибку при попытке ls для файла
         :param make_temp_directory: Фикстура для временных директорий
         :raises ShellError: При попытке листить файл
         """
@@ -335,3 +335,25 @@ class TestsLs:
         captured = capsys.readouterr()
 
         assert "file.txt" in captured.out
+
+    def test_ls_absolute_path(
+        self, make_temp_directory: Path, capsys: CaptureFixture[str]
+    ) -> None:
+        """
+        Проверяет вывод по абсолютному пути
+        :param make_temp_directory: Фикстура для временных директорий
+        :param capsys: Фикстура для захвата stdout
+        """
+        (make_temp_directory / "file.txt").write_text("content")
+        (make_temp_directory / "another.txt").write_text("another")
+
+        absolute_path = str(make_temp_directory.resolve())
+
+        tokens = argparse.Namespace(
+            paths=[absolute_path], l=False, al=False, all=False
+        )
+        Ls().execute(tokens)
+        captured = capsys.readouterr()
+
+        assert "file.txt" in captured.out
+        assert "another.txt" in captured.out

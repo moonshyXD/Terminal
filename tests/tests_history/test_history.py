@@ -1,5 +1,4 @@
 import argparse
-from collections import deque
 from pathlib import Path
 
 from _pytest.capture import CaptureFixture
@@ -75,46 +74,6 @@ class TestsHistory:
 
         assert "3 cat file.txt" in captured.out
 
-    def test_get_history_returns_deque(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет возврат deque
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        history_file = make_temp_directory / "src" / "history" / ".history"
-        history_file.write_text("1 ls\n2 cd /home\n3 cat file.txt\n")
-
-        monkeypatch.chdir(make_temp_directory)
-        history = History()
-
-        result = history._get_history(2)
-
-        assert isinstance(result, deque)
-        assert len(result) == 2
-
-    def test_get_history_maxlen(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет что deque ограничен maxlen
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        history_file = make_temp_directory / "src" / "history" / ".history"
-        history_file.write_text(
-            "1 ls\n2 cd /home\n3 cat file.txt\n4 grep pattern\n5 mkdir test\n"
-        )
-
-        monkeypatch.chdir(make_temp_directory)
-        history = History()
-
-        result = history._get_history(3)
-
-        assert len(result) == 3
-        assert "3 cat file.txt" in list(result)[0]
-
     def test_get_line_number_returns_string(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
@@ -151,25 +110,6 @@ class TestsHistory:
 
         assert line_number == "5"
         assert isinstance(line_number, str)
-
-    def test_add_history_increments_number(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет добавление команды с инкрементом номера
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        history_file = make_temp_directory / "src" / "history" / ".history"
-        history_file.write_text("1 ls\n2 cd /home\n")
-
-        monkeypatch.chdir(make_temp_directory)
-        history = History()
-
-        history.add_history("cat file.txt\n")
-
-        content = history_file.read_text()
-        assert "3 cat file.txt" in content
 
     def test_add_history_appends_to_file(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch

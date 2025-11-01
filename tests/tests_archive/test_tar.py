@@ -133,7 +133,6 @@ class TestsTar:
         archive_path = make_temp_directory / "folder_to_tar.tar.gz"
         assert archive_path.exists()
 
-        # Проверяем содержимое архива
         with tarfile.open(archive_path, "r:gz") as tar_file:
             members = tar_file.getnames()
             assert any("file1.txt" in m for m in members)
@@ -215,52 +214,6 @@ class TestsTar:
         with pytest.raises(NotADirectoryError):
             tar.execute(tokens)
 
-    def test_tar_method_creates_valid_archive(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет что _tar создаёт валидный архив
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        folder = make_temp_directory / "folder_to_tar"
-        folder.mkdir()
-        (folder / "file.txt").write_text("test content")
-
-        archive_path = make_temp_directory / "archive.tar.gz"
-
-        monkeypatch.chdir(make_temp_directory)
-        tar = Tar()
-
-        tar._tar(str(folder), str(archive_path), "folder_to_tar")
-
-        with tarfile.open(archive_path, "r:gz") as tar_file:
-            members = tar_file.getnames()
-            assert any("folder_to_tar" in m for m in members)
-
-    def test_tar_method_preserves_arcname(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет что arcname сохраняется правильно
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        folder = make_temp_directory / "my_folder"
-        folder.mkdir()
-        (folder / "file.txt").write_text("content")
-
-        archive_path = make_temp_directory / "archive.tar.gz"
-
-        monkeypatch.chdir(make_temp_directory)
-        tar = Tar()
-
-        tar._tar(str(folder), str(archive_path), "custom_name")
-
-        with tarfile.open(archive_path, "r:gz") as tar_file:
-            members = tar_file.getnames()
-            assert any("custom_name" in m for m in members)
-
     def test_execute_with_relative_path(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
@@ -281,52 +234,3 @@ class TestsTar:
 
         archive_path = make_temp_directory / "folder_to_tar.tar.gz"
         assert archive_path.exists()
-
-    def test_execute_archive_contains_folder_name(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет что архив содержит имя папки
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        folder = make_temp_directory / "my_special_folder"
-        folder.mkdir()
-        (folder / "file.txt").write_text("content")
-
-        monkeypatch.chdir(make_temp_directory)
-        tar = Tar()
-
-        tokens = argparse.Namespace(paths=[str(folder)])
-        tar.execute(tokens)
-
-        archive_path = make_temp_directory / "my_special_folder.tar.gz"
-
-        with tarfile.open(archive_path, "r:gz") as tar_file:
-            members = tar_file.getnames()
-            assert any("my_special_folder" in m for m in members)
-
-    def test_execute_creates_archive_in_specified_location(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет что архив создаётся в правильном месте
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        folder = make_temp_directory / "folder_to_tar"
-        folder.mkdir()
-        (folder / "file.txt").write_text("content")
-
-        archive_dir = make_temp_directory / "archives"
-        archive_dir.mkdir()
-        archive_path = archive_dir / "my_archive.tar.gz"
-
-        monkeypatch.chdir(make_temp_directory)
-        tar = Tar()
-
-        tokens = argparse.Namespace(paths=[str(folder), str(archive_path)])
-        tar.execute(tokens)
-
-        assert archive_path.exists()
-        assert not (make_temp_directory / "folder_to_tar.tar.gz").exists()

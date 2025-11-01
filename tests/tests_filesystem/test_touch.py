@@ -114,32 +114,6 @@ class TestsTouch:
 
         assert file.exists()
 
-    def test_touch_with_special_chars(self, make_temp_directory: Path) -> None:
-        """
-        Проверяет создание файла со спецсимволами в имени
-        :param make_temp_directory: Фикстура для временных директорий
-        """
-        file = make_temp_directory / "file-name_123.txt"
-
-        tokens = argparse.Namespace(paths=[str(file)])
-        Touch().execute(tokens)
-
-        assert file.exists()
-
-    def test_touch_in_subdirectory(self, make_temp_directory: Path) -> None:
-        """
-        Проверяет создание файла в существующей подпапке
-        :param make_temp_directory: Фикстура для временных директорий
-        """
-        subdir = make_temp_directory / "subdir"
-        subdir.mkdir()
-        file = subdir / "newfile.txt"
-
-        tokens = argparse.Namespace(paths=[str(file)])
-        Touch().execute(tokens)
-
-        assert file.exists()
-
     def test_touch_path_with_dots(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:

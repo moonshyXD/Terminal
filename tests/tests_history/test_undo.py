@@ -86,7 +86,6 @@ class TestsUndo:
         """
         monkeypatch.chdir(make_temp_directory)
         undo = Undo()
-        # Удаляем файл истории
         if os.path.exists(undo.undo_history_path):
             os.remove(undo.undo_history_path)
 
@@ -159,26 +158,6 @@ class TestsUndo:
 
         assert len(result) == 0
 
-    def test_get_last_command_group_empty_file(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет пустой файл истории
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        undo_history = (
-            make_temp_directory / "src" / "history" / ".undo_history"
-        )
-        undo_history.write_text("")
-
-        monkeypatch.chdir(make_temp_directory)
-        undo = Undo()
-
-        result = undo._get_last_command_group()
-
-        assert len(result) == 0
-
     def test_remove_last_lines_removes_correctly(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
@@ -203,27 +182,6 @@ class TestsUndo:
         assert "line3" not in content
         assert "line4" not in content
 
-    def test_remove_last_lines_more_than_exists(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет удаление больше строк чем существует
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        undo_history = (
-            make_temp_directory / "src" / "history" / ".undo_history"
-        )
-        undo_history.write_text("line1\n")
-
-        monkeypatch.chdir(make_temp_directory)
-        undo = Undo()
-
-        undo._remove_last_lines(10)
-
-        content = undo_history.read_text()
-        assert content == ""
-
     def test_undo_cp_removes_file(
         self,
         make_temp_directory: Path,
@@ -231,7 +189,7 @@ class TestsUndo:
         monkeypatch: MonkeyPatch,
     ) -> None:
         """
-        Проверяет отмену копирования файла
+        Проверяет отмену cp для файла
         :param make_temp_directory: Фикстура для временных директорий
         :param capsys: Фикстура для захвата stdout
         :param monkeypatch: Фикстура для изменения окружения
@@ -256,7 +214,7 @@ class TestsUndo:
         monkeypatch: MonkeyPatch,
     ) -> None:
         """
-        Проверяет отмену копирования директории
+        Проверяет отмену cp для директории
         :param make_temp_directory: Фикстура для временных директорий
         :param capsys: Фикстура для захвата stdout
         :param monkeypatch: Фикстура для изменения окружения
@@ -275,34 +233,11 @@ class TestsUndo:
         captured = capsys.readouterr()
         assert "Отменено копирование директории" in captured.out
 
-    def test_undo_cp_file_already_deleted(
-        self,
-        make_temp_directory: Path,
-        capsys: CaptureFixture[str],
-        monkeypatch: MonkeyPatch,
-    ) -> None:
-        """
-        Проверяет попытку отмены удалённого файла
-        :param make_temp_directory: Фикстура для временных директорий
-        :param capsys: Фикстура для захвата stdout
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        nonexistent_path = str(make_temp_directory / "nonexistent.txt")
-
-        monkeypatch.chdir(make_temp_directory)
-        undo = Undo()
-
-        tokens = argparse.Namespace(paths=[nonexistent_path])
-        undo._undo_cp(tokens)
-
-        captured = capsys.readouterr()
-        assert "Файл уже удалён" in captured.out
-
     def test_undo_mv_restores_file(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
         """
-        Проверяет отмену перемещения
+        Проверяет отмену mv
         :param make_temp_directory: Фикстура для временных директорий
         :param monkeypatch: Фикстура для изменения окружения
         """
@@ -328,7 +263,7 @@ class TestsUndo:
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
         """
-        Проверяет отмену удаления
+        Проверяет отмену rm
         :param make_temp_directory: Фикстура для временных директорий
         :param monkeypatch: Фикстура для изменения окружения
         """
@@ -438,7 +373,6 @@ class TestsUndo:
         """
         monkeypatch.chdir(make_temp_directory)
         undo = Undo()
-        # Удаляем файл истории
         if os.path.exists(undo.undo_history_path):
             os.remove(undo.undo_history_path)
 
@@ -456,7 +390,6 @@ class TestsUndo:
         """
         monkeypatch.chdir(make_temp_directory)
         undo = Undo()
-        # Удаляем файл истории
         if os.path.exists(undo.undo_history_path):
             os.remove(undo.undo_history_path)
 

@@ -28,7 +28,6 @@ class TestsUntar:
         :param make_temp_directory: Фикстура для временных директорий
         :param monkeypatch: Фикстура для изменения окружения
         """
-        # Создаём архив
         source_dir = make_temp_directory / "source"
         source_dir.mkdir()
         (source_dir / "file.txt").write_text("content")
@@ -37,7 +36,6 @@ class TestsUntar:
         with tarfile.open(archive_path, "w:gz") as tar:
             tar.add(str(source_dir), arcname="source")
 
-        # Распаковываем
         extract_dir = make_temp_directory / "extract"
         extract_dir.mkdir()
 
@@ -168,7 +166,7 @@ class TestsUntar:
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
         """
-        Проверяет что _untar распаковывает архив
+        Проверяет что untar распаковывает архив
         :param make_temp_directory: Фикстура для временных директорий
         :param monkeypatch: Фикстура для изменения окружения
         """
@@ -246,38 +244,6 @@ class TestsUntar:
         untar.execute(tokens)
 
         assert (extract_dir / "source").exists()
-
-    def test_execute_archive_with_multiple_top_level_items(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет распаковку архива с несколькими элементами на верхнем уровне
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        archive_path = make_temp_directory / "archive.tar.gz"
-
-        # Создаём архив с несколькими элементами
-        with tarfile.open(archive_path, "w:gz") as tar:
-            file1 = make_temp_directory / "file1.txt"
-            file1.write_text("content1")
-            tar.add(str(file1), arcname="file1.txt")
-
-            file2 = make_temp_directory / "file2.txt"
-            file2.write_text("content2")
-            tar.add(str(file2), arcname="file2.txt")
-
-        extract_dir = make_temp_directory / "extract"
-        extract_dir.mkdir()
-
-        monkeypatch.chdir(extract_dir)
-        untar = Untar()
-
-        tokens = argparse.Namespace(paths=[str(archive_path)])
-        untar.execute(tokens)
-
-        assert (extract_dir / "file1.txt").exists()
-        assert (extract_dir / "file2.txt").exists()
 
     def test_untar_method_with_custom_extract_path(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch

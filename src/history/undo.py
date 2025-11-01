@@ -2,7 +2,6 @@ import argparse
 import os
 import shutil
 from collections import deque
-from typing import List
 
 from src.filesystem.base_command import BaseClass
 from src.utils.errors import (
@@ -59,7 +58,7 @@ class Undo(BaseClass):
 
         self._remove_last_lines(len(last_commands))
 
-    def _get_last_command_group(self) -> List[str]:
+    def _get_last_command_group(self) -> list[str]:
         """
         Получает группу последних команд одного типа
         :return: Список последних команд одного типа
@@ -68,27 +67,33 @@ class Undo(BaseClass):
         try:
             with open(self.undo_history_path, "r", encoding="utf-8") as file:
                 lines = file.readlines()
-
-            if not lines:
-                return []
-
-            last_command = (
-                lines[-1].strip().split()[0] if lines[-1].strip() else ""
-            )
-
-            if last_command in ["mv", "rm"]:
-                result: List[str] = []
-                for line in reversed(lines):
-                    command = line.strip().split()[0] if line.strip() else ""
-                    if command == last_command:
-                        result.insert(0, line)
-                    else:
-                        break
-                return result
-
-            return []
         except FileNotFoundError:
             raise PathNotFoundError("Файл не найден") from None
+
+        if not lines:
+            return []
+
+        if lines[-1].strip():
+            last_command = lines[-1].strip().split()[0]
+        else:
+            last_command = ""
+
+        if last_command not in ("mv", "rm"):
+            return []
+
+        result: list[str] = []
+        for line in reversed(lines):
+            if line.strip():
+                command = line.strip().split()[0]
+            else:
+                command = ""
+
+            if command == last_command:
+                result.insert(0, line)
+            else:
+                break
+
+        return result
 
     def _remove_last_lines(self, count: int) -> None:
         """
@@ -99,13 +104,16 @@ class Undo(BaseClass):
         try:
             with open(self.undo_history_path, "r", encoding="utf-8") as file:
                 lines = file.readlines()
-
-            remaining = lines[:-count] if count < len(lines) else []
-
-            with open(self.undo_history_path, "w", encoding="utf-8") as file:
-                file.writelines(remaining)
         except FileNotFoundError:
             raise PathNotFoundError("Файл не найден") from None
+
+        if count < len(lines):
+            remaining = lines[:-count]
+        else:
+            remaining = []
+
+        with open(self.undo_history_path, "w", encoding="utf-8") as file:
+            file.writelines(remaining)
 
     def _undo_cp(self, tokens: argparse.Namespace) -> None:
         """

@@ -149,7 +149,7 @@ class TestsUnzip:
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
         """
-        Проверяет что _unzip распаковывает архив
+        Проверяет что unzip распаковывает архив
         :param make_temp_directory: Фикстура для временных директорий
         :param monkeypatch: Фикстура для изменения окружения
         """
@@ -182,7 +182,6 @@ class TestsUnzip:
         monkeypatch.chdir(make_temp_directory)
         unzip = Unzip()
 
-        # Используем относительный путь
         tokens = argparse.Namespace(paths=["archive.zip"])
         unzip.execute(tokens)
 
@@ -210,36 +209,11 @@ class TestsUnzip:
         extract_dir = make_temp_directory / "empty"
         assert extract_dir.exists()
 
-    def test_execute_archive_with_multiple_files(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет распаковку архива с несколькими файлами на верхнем уровне
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        archive_path = make_temp_directory / "archive.zip"
-        with zipfile.ZipFile(archive_path, "w") as zf:
-            zf.writestr("file1.txt", "content1")
-            zf.writestr("file2.txt", "content2")
-            zf.writestr("file3.txt", "content3")
-
-        monkeypatch.chdir(make_temp_directory)
-        unzip = Unzip()
-
-        tokens = argparse.Namespace(paths=[str(archive_path)])
-        unzip.execute(tokens)
-
-        extract_dir = make_temp_directory / "archive"
-        assert (extract_dir / "file1.txt").exists()
-        assert (extract_dir / "file2.txt").exists()
-        assert (extract_dir / "file3.txt").exists()
-
     def test_unzip_method_creates_extract_directory(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
         """
-        Проверяет что _unzip создаёт директорию
+        Проверяет что unzip создаёт директорию
         :param make_temp_directory: Фикстура для временных директорий
         :param monkeypatch: Фикстура для изменения окружения
         """

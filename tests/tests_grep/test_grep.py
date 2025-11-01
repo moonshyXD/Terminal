@@ -15,7 +15,7 @@ from src.utils.errors import (
 
 
 class TestsGrep:
-    """Тесты для команды grep с 100% покрытием"""
+    """Тесты для команды grep"""
 
     def test_grep_find_pattern_in_file(
         self, make_temp_directory: Path, capsys: CaptureFixture[str]
@@ -45,7 +45,7 @@ class TestsGrep:
         self, make_temp_directory: Path, capsys: CaptureFixture[str]
     ) -> None:
         """
-        Проверяет флаг игнорирования регистра (покрывает tokens.ignore_case)
+        Проверяет флаг игнорирования регистра
         :param make_temp_directory: Фикстура для временных директорий
         :param capsys: Фикстура для захвата stdout
         """
@@ -69,7 +69,7 @@ class TestsGrep:
         self, make_temp_directory: Path, capsys: CaptureFixture[str]
     ) -> None:
         """
-        Проверяет комбинированный флаг -ri (покрывает tokens.ri)
+        Проверяет комбинированный флаг -ri
         :param make_temp_directory: Фикстура для временных директорий
         :param capsys: Фикстура для захвата stdout
         """

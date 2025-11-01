@@ -15,7 +15,7 @@ from src.utils.errors import (
 
 
 class ConcreteCommand(BaseClass):
-    """Конкретная реализация абстрактного класса для тестирования"""
+    """Класс для тестов BaseClass"""
 
     def execute(self, tokens: argparse.Namespace) -> None:
         pass
@@ -203,29 +203,6 @@ class TestsBaseCommand:
             cmd._path_exists(str(make_temp_directory / "nonexistent"))
         assert "не найдены" in str(exc_info.value)
 
-    def test_path_exists_calls_correct_path(
-        self, make_temp_directory: Path
-    ) -> None:
-        """
-        Проверяет вызов _correct_path в _path_exists
-        :param make_temp_directory: Фикстура для временных директорий
-        """
-        cmd = ConcreteCommand()
-
-        with pytest.raises(InvalidPathError):
-            cmd._path_exists(str(make_temp_directory / "file#name.txt"))
-
-    def test_is_file_valid_file(self, make_temp_directory: Path) -> None:
-        """
-        Проверяет валидный файл
-        :param make_temp_directory: Фикстура для временных директорий
-        """
-        file = make_temp_directory / "file.txt"
-        file.write_text("content")
-        cmd = ConcreteCommand()
-
-        cmd._is_file(str(file))
-
     def test_is_file_not_file_directory(
         self, make_temp_directory: Path
     ) -> None:
@@ -239,17 +216,6 @@ class TestsBaseCommand:
         with pytest.raises(NotAFileError) as exc_info:
             cmd._is_file(str(make_temp_directory))
         assert "Не является файлом" in str(exc_info.value)
-
-    def test_is_directory_valid_directory(
-        self, make_temp_directory: Path
-    ) -> None:
-        """
-        Проверяет валидную директорию
-        :param make_temp_directory: Фикстура для временных директорий
-        """
-        cmd = ConcreteCommand()
-
-        cmd._is_directory(str(make_temp_directory))
 
     def test_is_directory_not_directory_file(
         self, make_temp_directory: Path

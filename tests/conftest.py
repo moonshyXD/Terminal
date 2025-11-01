@@ -53,7 +53,7 @@ def make_temp_structure(temp_path: Path) -> Path:
 
 
 @pytest.fixture(autouse=True)
-def change_to_temp_directory(
+def change_to_history_directory(
     temp_path: Path, monkeypatch: MonkeyPatch
 ) -> Path:
     """

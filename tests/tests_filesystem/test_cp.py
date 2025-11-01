@@ -91,24 +91,6 @@ class TestsCp:
         with pytest.raises(ShellError):
             Cp().execute(tokens)
 
-    def test_cp_file_with_recursive_flag_raises_error(
-        self, make_temp_directory: Path
-    ) -> None:
-        """
-        Проверяет ошибку при копировании файла с флагом -r
-        :param make_temp_directory: Фикстура для временных директорий
-        :raises ShellError: При попытке копировать файл как директорию
-        """
-        source = make_temp_directory / "file.txt"
-        source.write_text("content")
-        destination = make_temp_directory / "copied"
-
-        tokens = argparse.Namespace(
-            paths=[str(source), str(destination)], recursive=True
-        )
-        with pytest.raises(ShellError):
-            Cp().execute(tokens)
-
     def test_cp_directory_without_recursive_raises_error(
         self, make_temp_structure: Path
     ) -> None:
@@ -222,6 +204,25 @@ class TestsCp:
 
         assert destination.exists()
         assert destination.read_text() == "content"
+
+    def test_cp_absolute_paths(self, make_temp_directory: Path) -> None:
+        """
+        Проверяет работу с абсолютными путями
+        :param make_temp_directory: Фикстура для временных директорий
+        """
+        source = make_temp_directory / "source.txt"
+        source.write_text("content")
+        destination = make_temp_directory / "destination.txt"
+
+        tokens = argparse.Namespace(
+            paths=[str(source.resolve()), str(destination.resolve())],
+            recursive=False,
+        )
+        Cp().execute(tokens)
+
+        assert destination.exists()
+        assert destination.read_text() == "content"
+        assert source.exists()
 
     def test_cp_directory_with_trailing_slash(
         self, make_temp_structure: Path

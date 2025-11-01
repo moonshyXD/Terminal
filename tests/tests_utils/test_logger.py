@@ -6,7 +6,7 @@ from src.utils.logger import Logger
 
 
 class TestsLogger:
-    """Тесты для Logger с 100% покрытием"""
+    """Тесты для Logger"""
 
     def test_setup_logging_creates_config(self) -> None:
         """
@@ -54,7 +54,7 @@ class TestsLogger:
 
     def test_success_execution_logs_command(self) -> None:
         """
-        Проверяет логирование успешного выполнения (покрывает logging.info)
+        Проверяет логирование успешного выполнения
         """
         with patch("logging.info") as mock_info:
             Logger.success_execution("cd /home")

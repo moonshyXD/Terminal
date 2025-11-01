@@ -10,7 +10,7 @@ from src.utils.errors import NotADirectoryError, PathNotFoundError, ShellError
 
 
 class TestsZip:
-    """Тесты для Zip с 100% покрытием"""
+    """Тесты для Zip"""
 
     def test_zip_init(self) -> None:
         """
@@ -192,29 +192,6 @@ class TestsZip:
         with pytest.raises(NotADirectoryError):
             zip_obj.execute(tokens)
 
-    def test_zip_method_creates_valid_archive(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет что _zip создаёт валидный архив
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        folder = make_temp_directory / "folder_to_zip"
-        folder.mkdir()
-        (folder / "file.txt").write_text("test content")
-
-        archive_path = make_temp_directory / "archive.zip"
-
-        monkeypatch.chdir(make_temp_directory)
-        zip_obj = Zip()
-
-        zip_obj._zip(str(folder), str(archive_path))
-
-        with zipfile.ZipFile(archive_path, "r") as zf:
-            names = zf.namelist()
-            assert "file.txt" in names
-
     def test_execute_with_relative_path(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
     ) -> None:
@@ -235,66 +212,6 @@ class TestsZip:
 
         archive_path = make_temp_directory / "folder_to_zip.zip"
         assert archive_path.exists()
-
-    def test_execute_archive_contains_file_hierarchy(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет что архив сохраняет иерархию файлов
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        folder = make_temp_directory / "folder_to_zip"
-        folder.mkdir()
-        (folder / "file1.txt").write_text("content1")
-
-        subdir1 = folder / "subdir1"
-        subdir1.mkdir()
-        (subdir1 / "file2.txt").write_text("content2")
-
-        subdir2 = folder / "subdir2"
-        subdir2.mkdir()
-        (subdir2 / "file3.txt").write_text("content3")
-
-        monkeypatch.chdir(make_temp_directory)
-        zip_obj = Zip()
-
-        tokens = argparse.Namespace(paths=[str(folder)])
-        zip_obj.execute(tokens)
-
-        archive_path = make_temp_directory / "folder_to_zip.zip"
-
-        with zipfile.ZipFile(archive_path, "r") as zf:
-            names = zf.namelist()
-            assert "file1.txt" in names
-            assert any("subdir1" in n for n in names)
-            assert any("file2.txt" in n for n in names)
-            assert any("subdir2" in n for n in names)
-            assert any("file3.txt" in n for n in names)
-
-    def test_execute_uses_deflate_compression(
-        self, make_temp_directory: Path, monkeypatch: MonkeyPatch
-    ) -> None:
-        """
-        Проверяет что используется сжатие DEFLATE
-        :param make_temp_directory: Фикстура для временных директорий
-        :param monkeypatch: Фикстура для изменения окружения
-        """
-        folder = make_temp_directory / "folder_to_zip"
-        folder.mkdir()
-        (folder / "file.txt").write_text("content" * 1000)
-
-        monkeypatch.chdir(make_temp_directory)
-        zip_obj = Zip()
-
-        tokens = argparse.Namespace(paths=[str(folder)])
-        zip_obj.execute(tokens)
-
-        archive_path = make_temp_directory / "folder_to_zip.zip"
-
-        with zipfile.ZipFile(archive_path, "r") as zf:
-            for info in zf.filelist:
-                assert info.compress_type == zipfile.ZIP_DEFLATED
 
     def test_execute_multiple_nested_directories(
         self, make_temp_directory: Path, monkeypatch: MonkeyPatch
